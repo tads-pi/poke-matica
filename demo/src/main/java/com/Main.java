@@ -33,6 +33,8 @@ import io.jsonwebtoken.security.Keys;
 
 public class Main {
     // GAME OPTIONS
+    public static final int DEFAULT_TEXT_SPEED = 35; // in milliseconds;
+
     public static final int OPTION_INTRODUCTION = 1;
     public static final int OPTION_PLAY = 2;
     public static final int OPTION_CREDITS = 3;
@@ -97,6 +99,7 @@ public class Main {
     // FALAS - ERROR
     public final String ERROR_OPTION_NOT_AVAILABLE = "Escolha uma das opções válidas!";
     public final String ERROR_DEFAULT_MESSAGE = "Houve um erro, comunique nossa equipe ou tente novamente mais tarde. Obrigado!";
+    public final String ERROR_NUMBER_FORMAT_EXCEPTION = "Caractere inserido é inválido!";
 
     /*------------------------------------------------------------------------------------------------*/
     /*---------------JWT AND CERTIFICATE AREA---------------JWT AND CERTIFICATE AREA------------------*/
@@ -133,7 +136,7 @@ public class Main {
 
     // GAME
     public void startGame() {
-        System.out.println(INTRODUCTION);
+        print("\n" + INTRODUCTION);
         handleOptions(OPTIONS_INIT);
     }
 
@@ -143,8 +146,9 @@ public class Main {
             System.out.print(ASK_NAME);
             userName = input.nextLine();
         }
-        String inlineStory = STORY_01 + "\n" + STORY_02 + "\n" + STORY_03 + "\n" + STORY_04 + "\n" + STORY_05;
-        System.out.println(inlineStory.replaceAll("%s", userName));
+        String inlineStory = STORY_01 + "\n" + STORY_02 + "\n" + STORY_03 + "\n" +
+                STORY_04 + "\n" + STORY_05;
+        print(inlineStory.replaceAll("%s", userName));
         divider();
 
         if (pokemon == NO_POKEMON) {
@@ -166,38 +170,67 @@ public class Main {
     }
 
     public void handleBattle() {
-        // DEVELOPMENT ONLY
-        handleCertificateCreator();
-        // REMOVE SOON
-
         System.out.println("handle battle");
         handleOptions(OPTIONS_PLAY);
     }
 
     public void handleTrain() {
         System.out.println("handle train");
+        handleOptions(OPTIONS_PLAY);
     }
 
     public void handleBag() {
         System.out.println("handle bag");
+        handleOptions(OPTIONS_PLAY);
     }
 
     public void handleSave() {
         System.out.println("handle save");
-
         handleOptions(OPTIONS_SAVE);
     }
 
     // Handle the Credits option, showing the creator names and references
     public void handleCredits() {
         System.out.println("Créditos");
+        handleOptions(OPTIONS_INIT);
     }
 
     // Handle the Exit option
     public void handleExit() {
-        System.out.println(THANKS_FOR_PLAYING);
+        print(THANKS_FOR_PLAYING);
         // System.exit(0) indicates successful termination
         System.exit(0);
+    }
+
+    // Handle the certificate emission
+    public void handleCertificateValidation() {
+        String token = askForToken();
+        Jws<Claims> jws = decodeJWT(token);
+        Claims body = jws.getBody();
+
+        // Printing status
+        divider();
+        Date now = new Date(System.currentTimeMillis());
+        Date exp = body.getExpiration();
+        if (now.getTime() > exp.getTime()) {
+            System.out.println("Status Atual: Expirado!");
+        } else {
+            System.out.println("Status Atual: Ativo!");
+        }
+        System.out.println();
+        System.out.println("Emitido por:        " + body.getIssuer());
+        System.out.println("Assunto:            " + body.getSubject());
+        System.out.println("Emitido em:         " + body.getIssuedAt());
+        System.out.println("Data de exipração:  " + body.getExpiration());
+        System.out.println();
+        System.out.println("Dono:               " + body.get(NAME_CLAIM));
+        divider();
+
+        // Callback options
+        print("Pressione ENTER para sair");
+        input.nextLine();
+        clearScreen();
+        handleOptions(OPTIONS_INIT);
     }
 
     // Handle all code errors, treating then and avoiding Crashes
@@ -205,15 +238,55 @@ public class Main {
         try {
             throw e;
         } catch (NumberFormatException nfe) {
-            System.out.println("HANDLE_NUMER_FORMAT_EXEPTION");
+            System.out.println(ERROR_NUMBER_FORMAT_EXCEPTION);
         } catch (Exception e1) {
-            System.out.println("HANDLE_DEFAULT_FORMAT_EXEPTION");
+            System.out.println(ERROR_DEFAULT_MESSAGE);
         }
     }
 
     /*------------------------------------------------------------------------------------------------*/
 
     // UTILS
+    public void print(String str) {
+        char[] arr = str.toCharArray();
+        int milisToAdd = DEFAULT_TEXT_SPEED;
+
+        int pos = 0;
+        long currentTime = System.currentTimeMillis();
+        long calcTime = currentTime + milisToAdd;
+        long targetTime = currentTime + (milisToAdd * arr.length);
+
+        do {
+            currentTime = System.currentTimeMillis();
+            if (currentTime >= calcTime) {
+                System.out.print(arr[pos]);
+                pos++;
+                calcTime += milisToAdd;
+            }
+        } while (calcTime <= targetTime);
+        System.out.println();
+    }
+
+    public void speedPrint(String str) {
+        char[] arr = str.toCharArray();
+        int milisToAdd = (int) (DEFAULT_TEXT_SPEED * 0.5);
+
+        int pos = 0;
+        long currentTime = System.currentTimeMillis();
+        long calcTime = currentTime + milisToAdd;
+        long targetTime = currentTime + (milisToAdd * arr.length);
+
+        do {
+            currentTime = System.currentTimeMillis();
+            if (currentTime >= calcTime) {
+                System.out.print(arr[pos]);
+                pos++;
+                calcTime += milisToAdd;
+            }
+        } while (calcTime <= targetTime);
+        System.out.println();
+    }
+
     public void clearScreen() {
         for (int i = 0; i < 50; i++) {
             System.out.println();
@@ -235,10 +308,10 @@ public class Main {
 
     // Ask user what pokemon they want
     public String chooseInitialPokemon() {
-        System.out.println(CHOOSE_POKEMON);
+        print(CHOOSE_POKEMON);
         divider();
         for (String pokemonName : STARTER_AVAILABLE_POKEMONS) {
-            System.out.println(pokemonName);
+            print(pokemonName);
         }
         divider();
 
@@ -249,7 +322,7 @@ public class Main {
             return pokemon;
         } else {
             // If pokemon is not available it calls the func again
-            System.out.println(POKEMON_NOT_AVAILABLE);
+            print(POKEMON_NOT_AVAILABLE);
             pokemon = chooseInitialPokemon();
         }
         return pokemon;
@@ -284,7 +357,7 @@ public class Main {
             return optionsArr[selectedOption];
             // If any errors occurred, like invalid number
         } catch (Exception e) {
-            System.out.println(ERROR_OPTION_NOT_AVAILABLE);
+            print(ERROR_OPTION_NOT_AVAILABLE);
             // Looping through this function again
             int key = getSelectedOption(options);
             for (int i = 0; i < optionsArr.length; i++) {
@@ -366,7 +439,7 @@ public class Main {
             }
             poke_matica_secret_key = sb.toString();
         } catch (Exception e) {
-            System.out.println(ERROR_DEFAULT_MESSAGE);
+            handleError(e);
         }
         return Keys.hmacShaKeyFor(
                 Decoders.BASE64.decode(poke_matica_secret_key));
@@ -379,43 +452,13 @@ public class Main {
                 .parseClaimsJws(token);
     }
 
-    public void handleCertificateValidation() {
-        String token = askForToken();
-        Jws<Claims> jws = decodeJWT(token);
-        Claims body = jws.getBody();
-
-        // Printing status
-        divider();
-        Date now = new Date(System.currentTimeMillis());
-        Date exp = body.getExpiration();
-        if (now.getTime() > exp.getTime()) {
-            System.out.println("Status Atual: Expirado!");
-        } else {
-            System.out.println("Status Atual: Ativo!");
-        }
-        System.out.println();
-        System.out.println("Emitido por:        " + body.getIssuer());
-        System.out.println("Assunto:            " + body.getSubject());
-        System.out.println("Emitido em:         " + body.getIssuedAt());
-        System.out.println("Data de exipração:  " + body.getExpiration());
-        System.out.println();
-        System.out.println("Dono:               " + body.get(NAME_CLAIM));
-        divider();
-
-        // Callback options
-        System.out.println("Pressione ENTER para sair");
-        input.nextLine();
-        clearScreen();
-        handleOptions(OPTIONS_INIT);
-    }
-
     public String askForToken() {
-        System.out.println("Insira o Token do certificado:");
+        speedPrint("Insira o Token do certificado:");
         String token = input.nextLine();
         // cleanning illegal character
         token = token.replace(" ", "");
         if (!isValidToken(token)) {
-            System.out.println("\nToken inválido, por favor tente novamente.");
+            speedPrint("\nToken inválido, por favor tente novamente.");
             return askForToken();
         } else {
             return token;
@@ -445,7 +488,7 @@ public class Main {
 
             closeDocument();
 
-            System.out.println(
+            print(
                     "Certificado Emitido com sucesso!\n" + CERTIFICATE_ABSOLUTE_PATH + CERTIFICATE_NAME + "\n");
         } catch (Exception e) {
             handleError(e);
