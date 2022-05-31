@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +46,12 @@ public class Main {
     public static final int OPTION_SAVE = 8;
     public static final int OPTION_PLAY_EXIT = 9;
     public static final int OPTION_VALIDATE_CERTIFICATE = 10;
+
+    public static final int DIFICULT_GYM_01 = 1;
+    public static final int DIFICULT_GYM_02 = 2;
+    public static final int DIFICULT_GYM_03 = 3;
+    public static final int DIFICULT_GYM_04 = 4;
+    public static final int DIFICULT_GYM_05 = 5;
 
     public static final Map<Integer, String> OPTIONS_INIT = new HashMap<>();
     static {
@@ -409,6 +416,95 @@ public class Main {
         }
     }
 
+    // QUESTIONS HANDLERS
+    public void handleQuestion(int difficulty) {
+
+        switch (difficulty) {
+            case DIFICULT_GYM_01:
+                // handleGymX();
+                break;
+            case DIFICULT_GYM_02:
+                handleGymPAPG();
+                break;
+            case DIFICULT_GYM_03:
+                // handleGymX();
+                break;
+            case DIFICULT_GYM_04:
+                // handleGymX();
+                break;
+            case DIFICULT_GYM_05:
+                handleGymMTI();
+                break;
+        }
+    }
+
+    public void handleGymPAPG() {
+        ArrayList<Integer> EMPTY_ARRAY_LIST = new ArrayList<Integer>();
+
+        int MINIMUM_PA_SIZE = 10;
+        int MAXIMUM_PA_SIZE = 20;
+
+        int[] pa = new int[(int) ((Math.random() + MINIMUM_PA_SIZE / 10) * MAXIMUM_PA_SIZE)];
+        int randomStart = (int) (Math.random() * 10);
+        int randomSum = (int) (Math.random() * 10);
+        for (int i = 0; i < pa.length; i++) {
+            pa[i] = randomStart;
+            randomStart += randomSum;
+        }
+        final int x = sortInt(0, pa.length - (pa.length / 2 - 1), EMPTY_ARRAY_LIST);
+        final int y = sortInt(0, pa.length - (pa.length / 2 + 1), new ArrayList<Integer>() {
+            {
+                add(x);
+            }
+        });
+
+        final int z = sortInt(0, pa.length, EMPTY_ARRAY_LIST);
+
+        String PA_DEFAULT_QUESTION = String.valueOf("Se X%d = %d e X%d = %d, X%d = ? ").replace('X',
+                new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j' }[(int) (Math.random() * 10)]);
+
+        System.out.printf(PA_DEFAULT_QUESTION, (x + 1), pa[x], (y + 1), pa[y], (z + 1));
+
+        String userInput = input.nextLine();
+        String awnser = pa[z] + "";
+
+        if (rightAwser(userInput, awnser)) {
+            System.out.println("yes!");
+        } else {
+            System.out.println("no!");
+        }
+    }
+
+    public int sortInt(int minimum, int maximum, ArrayList<Integer> prohibited) {
+        int value = (int) ((Math.random() + minimum / 10) * maximum);
+        for (Integer i : prohibited) {
+            if (value == i) {
+                return sortInt(minimum, maximum, prohibited);
+            }
+        }
+
+        return value;
+    }
+
+    public boolean rightAwser(String user_awnser, String awnser) {
+        user_awnser = user_awnser.replace(",", ".");
+        user_awnser = user_awnser.replace(" ", "");
+
+        return awnser.equalsIgnoreCase(user_awnser);
+    }
+
+    public void handleGymMTI() {
+
+        String userResponse = input.nextLine();
+
+        // Preventing errors
+        // correctResponse = correctResponse.replace(",", ".");
+        userResponse = userResponse.replace(",", ".");
+        userResponse = userResponse.replace(" ", "");
+
+    }
+    //
+
     // JWT HANDLERS
     public String generateJWT() {
         String jwtToken = Jwts.builder()
@@ -478,6 +574,7 @@ public class Main {
     }
 
     //
+
     // PDF HANDLERS
     public void handleCertificateCreator() {
         try {
@@ -561,6 +658,7 @@ public class Main {
     //
     public static void main(String args[]) {
         Main main = new Main();
-        main.startGame();
+        // main.startGame();
+        main.handleQuestion(DIFICULT_GYM_02);
     }
 }
