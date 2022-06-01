@@ -441,24 +441,24 @@ public class Main {
     public void handleGymPAPG() {
         ArrayList<Integer> EMPTY_ARRAY_LIST = new ArrayList<Integer>();
 
-        int MINIMUM_PA_SIZE = 10;
-        int MAXIMUM_PA_SIZE = 20;
+        int MINIMUM_SIZE = 10;
+        int MAXIMUM_SIZE = 20;
 
-        int[] pa = new int[(int) ((Math.random() + MINIMUM_PA_SIZE / 10) * MAXIMUM_PA_SIZE)];
+        int[] pa = new int[sortInt(MINIMUM_SIZE, MAXIMUM_SIZE, EMPTY_ARRAY_LIST)];
         int randomStart = (int) (Math.random() * 10);
         int randomSum = (int) (Math.random() * 10);
         for (int i = 0; i < pa.length; i++) {
             pa[i] = randomStart;
             randomStart += randomSum;
         }
-        final int x = sortInt(0, pa.length - (pa.length / 2 - 1), EMPTY_ARRAY_LIST);
-        final int y = sortInt(0, pa.length - (pa.length / 2 + 1), new ArrayList<Integer>() {
+        final int x = sortInt(0, pa.length / 2 - 1, EMPTY_ARRAY_LIST);
+        final int y = sortInt(pa.length / 2, pa.length - 1, new ArrayList<Integer>() {
             {
                 add(x);
             }
         });
 
-        final int z = sortInt(0, pa.length, EMPTY_ARRAY_LIST);
+        final int z = sortInt(0, pa.length - 1, EMPTY_ARRAY_LIST);
 
         String PA_DEFAULT_QUESTION = String.valueOf("Se X%d = %d e X%d = %d, X%d = ? ").replace('X',
                 new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j' }[(int) (Math.random() * 10)]);
@@ -473,10 +473,45 @@ public class Main {
         } else {
             System.out.println("no!");
         }
+
+        // teste pg
+
+        String PG_TEMPLATE_QUESTION = "A sequência seguinte é uma progressão geométrica, observe: (%d, %d, %d, %d...). Determine o %dº termo dessa progressão: ";
+
+        int[] pg = new int[(int) ((Math.random() + MINIMUM_SIZE / 10) * MAXIMUM_SIZE)];
+        randomStart = (int) (Math.random() * (10 - 1) + 1);
+        randomSum = (int) (Math.random() * 10);
+        for (int i = 0; i < pg.length; i++) {
+            pg[i] = randomStart;
+            randomStart *= randomSum;
+        }
+        final int a = sortInt(0, pg.length / 2 - 1, EMPTY_ARRAY_LIST);
+        final int b = sortInt(pg.length / 2, pg.length - 1 , new ArrayList<Integer>() {
+            {
+                add(a);
+            }
+        });
+
+        final int c = sortInt(0, pg.length - 6, EMPTY_ARRAY_LIST);
+        final int d = sortInt(c, pg.length - 1, EMPTY_ARRAY_LIST);
+
+        System.out.printf(PG_TEMPLATE_QUESTION, pg[c], pg[c+1], pg[c+2], pg[c+3], d);
+
+        userInput = input.nextLine();
+        awnser = pg[d] + "";
+
+        if (rightAwser(userInput, awnser)) {
+            System.out.println("yes!");
+        } else {
+            System.out.println("no!");
+        }
+
+
     }
 
     public int sortInt(int minimum, int maximum, ArrayList<Integer> prohibited) {
-        int value = (int) ((Math.random() + minimum / 10) * maximum);
+        int value = (int) ((Math.random() + (maximum - minimum)) + minimum);
+
         for (Integer i : prohibited) {
             if (value == i) {
                 return sortInt(minimum, maximum, prohibited);
