@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topics>
+    <topic type="LOGICA" id="11">
+        <slug>Lógica com lego: </slug>
+        <url>https://pt.khanacademy.org/science/electrical-engineering/lego-robotics/lego-coin-detector/v/lego-switchlogic</url>
+    </topic>
+    <topic type="PA" id="12">
+        <slug>Lógica com lego: </slug>
+        <url>https://pt.khanacademy.org/math/em-mat-algebra2/x1d9e5bc8bded7b21:progressao-aritmetica-p-a</url>
+    </topic>
+    <topic type="PG" id="13">
+        <slug>Lógica com lego: </slug>
+        <url>https://pt.khanacademy.org/math/em-mat-algebra2/x1d9e5bc8bded7b21:progressao-geometrica-p-g</url>
+    </topic>
+    <topic type="FUNCOES-DE-PRIMEIRO-GRAU" id="14">
+        <slug>Lógica com lego: </slug>
+        <url>https://pt.khanacademy.org/math/pre-algebra/pre-algebra-equations-expressions/pre-algebra-equation-word-problems/v/constructing-basic-equations-examples</url>
+    </topic>
+    <topic type="FUNCOES-DE-SEGUNDO-GRAU" id="15">
+        <slug>Lógica com lego: </slug>
+        <url>https://pt.khanacademy.org/math/algebra-home/alg-functions/alg-determining-the-range-of-a-function/v/domain-and-range-of-a-function-given-a-formula</url>
+    </topic>
+    <topic type="FUNCOES-EXPONENCIAIS" id="16">
+        <slug>Lógica com lego: </slug>
+        <url>https://pt.khanacademy.org/math/algebra-home/alg-exp-and-log</url>
+    </topic>
+</topics>
