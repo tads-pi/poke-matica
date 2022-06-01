@@ -191,7 +191,21 @@ public class Main {
 
     // Handle the Credits option, showing the creator names and references
     public void handleCredits() {
-        System.out.println("Créditos");
+        divider();
+        System.out.println("Créditos:");
+        System.out.println(
+                "\nDesenvolvedores:" +
+                        "\n   Guilherme Rojas Thomazini" +
+                        "\n   João Victor Carvalho dos Santos" +
+                        "\n   Kauã Chaves Calixto" +
+                        "\n   Lucas Gabriel Pereira" +
+                        "\n" +
+                        "\nAgradecimentos Especiais:" +
+                        "\n   Professor Marcio Welker Correa" +
+                        "" +
+                        "");
+        divider();
+
         handleOptions(OPTIONS_INIT);
     }
 
