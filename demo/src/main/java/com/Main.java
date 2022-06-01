@@ -206,51 +206,12 @@ public class Main {
         if (selectedOption == OPTION_TRAIN_EXIT) {
             handleOptions(OPTIONS_PLAY);
         } else {
-            train(selectedOption);
-            handleTrain();
-        }
-    }
-
-    public void train(int TYPE) {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            org.w3c.dom.Document doc = builder.parse(KHAN_ACADEMY_LINKS_FILE);
-
-            final String QUERY_TOPIC = "topic";
-            final String QUERY_ID = "id";
-
-            NodeList topic_list = doc.getElementsByTagName(QUERY_TOPIC);
-
-            for (int i = 0; i < topic_list.getLength(); i++) {
-                Node item = topic_list.item(i);
-
-                if (item.getNodeType() == Node.ELEMENT_NODE) {
-                    org.w3c.dom.Element element = (org.w3c.dom.Element) item;
-                    String id = element.getAttribute(QUERY_ID);
-                    // Comparing if it's the user selected options
-                    if (id.equalsIgnoreCase(TYPE + "")) {
-                        NodeList data = element.getChildNodes();
-                        for (int j = 0; j < data.getLength(); j++) {
-                            Node valueWrapper = data.item(j);
-                            if (valueWrapper.getNodeType() == Node.ELEMENT_NODE) {
-                                org.w3c.dom.Element value = (org.w3c.dom.Element) valueWrapper;
-                                String str = String.valueOf(value.getTextContent());
-
-                                System.out.print(str);
-                            }
-                        }
-                        System.out.println();
-                    }
-                }
+            try {
+                train(selectedOption);
+            } catch (Exception e) {
+                handleError(e);
             }
-
-        } catch (ParserConfigurationException e) {
-            System.out.println("err: " + e);
-        } catch (SAXException e) {
-            System.out.println("err: " + e);
-        } catch (IOException e) {
-            System.out.println("err: " + e);
+            handleTrain();
         }
     }
 
@@ -555,6 +516,40 @@ public class Main {
     }
 
     //
+    public void train(int TYPE) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        org.w3c.dom.Document doc = builder.parse(KHAN_ACADEMY_LINKS_FILE);
+
+        final String QUERY_TOPIC = "topic";
+        final String QUERY_ID = "id";
+
+        NodeList topic_list = doc.getElementsByTagName(QUERY_TOPIC);
+
+        for (int i = 0; i < topic_list.getLength(); i++) {
+            Node item = topic_list.item(i);
+
+            if (item.getNodeType() == Node.ELEMENT_NODE) {
+                org.w3c.dom.Element element = (org.w3c.dom.Element) item;
+                String id = element.getAttribute(QUERY_ID);
+                // Comparing if it's the user selected options
+                if (id.equalsIgnoreCase(TYPE + "")) {
+                    NodeList data = element.getChildNodes();
+                    for (int j = 0; j < data.getLength(); j++) {
+                        Node valueWrapper = data.item(j);
+                        if (valueWrapper.getNodeType() == Node.ELEMENT_NODE) {
+                            org.w3c.dom.Element value = (org.w3c.dom.Element) valueWrapper;
+                            String str = String.valueOf(value.getTextContent());
+
+                            System.out.print(str);
+                        }
+                    }
+                    System.out.println();
+                }
+            }
+        }
+    }
+
     // PDF HANDLERS
     public void handleCertificateCreator() {
         try {
