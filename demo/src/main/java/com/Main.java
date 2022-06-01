@@ -30,6 +30,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import javafx.scene.input.PickResult;
 
 public class Main {
     // GAME OPTIONS
@@ -80,6 +81,15 @@ public class Main {
             "Squirtle",
             "1"
     };
+    //GYM DATA
+    public static final String[] GYM_NAME = new String[] {
+        "01)ginasio1",
+        "02)ginasio2",
+        "03)ginasio3",
+        "04)ginasio4",
+        "05)ginasio MTI",
+    };
+
     // FALAS - USER
     public final String ASK_NAME = "insira seu nome:";
     public final String THANKS_FOR_PLAYING = "Obrigado por jogar!";
@@ -170,8 +180,43 @@ public class Main {
     }
 
     public void handleBattle() {
-        System.out.println("handle battle");
+        int optionGym;
+        System.out.println("selecione o ginasio a qual quer enfrentra");
+        for (int i = 0; i < GYM_NAME.length; i++) {
+            System.out.println(GYM_NAME[i]);
+        }
+        optionGym = input.nextInt();
+        input.nextLine();
+        SelectGym(optionGym);
+         
         handleOptions(OPTIONS_PLAY);
+    }
+
+    public void SelectGym(int optionGym){
+        int optionDefault = 0;
+        do {
+            switch (optionGym) {
+                case 1:
+                    System.out.println(GYM_NAME[0]);
+                    break;
+                case 2:
+                    System.out.println(GYM_NAME[1]);
+                    break;
+                case 3:
+                    System.out.println(GYM_NAME[2]);
+                    break;
+                case 4:
+                    System.out.println(GYM_NAME[3]);
+                    break;
+                case 5:
+                    System.out.println("função ginasio MTI");
+                    break;
+            
+                default: System.out.println("opção invalida selecione novamente ");
+                            optionDefault = 1;
+                    break;
+            }
+        } while (optionDefault == 1);
     }
 
     public void handleTrain() {
@@ -257,6 +302,8 @@ public class Main {
             System.out.println(ERROR_DEFAULT_MESSAGE);
         }
     }
+
+    
 
     /*------------------------------------------------------------------------------------------------*/
 
