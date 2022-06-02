@@ -83,11 +83,11 @@ public class Main {
     };
     //GYM DATA
     public static final String[] GYM_NAME = new String[] {
-        "ginasio1",
-        "ginasio2",
-        "ginasio3",
-        "ginasio4",
+        "ginasio nutella x RAIZES",
+        "ginasio santuario matematico",
+        "ginasio numerico",
         "ginasio MTI",
+        "ginasio Do Grão Mestre",
     };
 
     // FALAS - USER
