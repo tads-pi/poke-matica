@@ -152,8 +152,22 @@ public class Main {
     // Handle the introduction, telling the game story and get user name
     public void handleIntroduction() {
         if (userName == NO_NAME) {
-            System.out.print(ASK_NAME);
+            print(ASK_NAME);
             userName = input.nextLine();
+
+            print("você tem certeza que o nome esta correto ? (sim para confirmar n para não) ");
+
+            String yes = "sim";
+
+            String validacao = input.nextLine();
+
+            if (validacao.equalsIgnoreCase(yes)) {
+
+            } else {
+                print(ASK_NAME);
+                userName = input.nextLine();
+            }
+
         }
         String inlineStory = STORY_01 + "\n" + STORY_02 + "\n" + STORY_03 + "\n" +
                 STORY_04 + "\n" + STORY_05;
