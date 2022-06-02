@@ -116,7 +116,6 @@ public class Main {
             "Bulbassauro",
             "Charmander",
             "Squirtle",
-            "1"
     };
     // GYM DATA
     public static final String[] GYM_NAME = new String[] {
@@ -248,13 +247,13 @@ public class Main {
             handleIntroduction();
         }
 
-        System.out.println("HANDLE PLAY");
+        // System.out.println("HANDLE PLAY");
         handleOptions(OPTIONS_PLAY);
     }
 
     public void handleBattle() {
         int optionGym;
-        print("selecione o ginasio a qual quer enfrentra");
+        print("Selecione o ginásio que quer enfrentar!");
         divider();
         for (int i = 0; i < GYM_NAME.length; i++) {
             print((i + 1) + ")" + GYM_NAME[i]);
@@ -273,6 +272,7 @@ public class Main {
             switch (optionGym) {
                 case 1:
                     gymVeryEasy();
+                    handleCertificateCreator();
                     break;
                 case 2:
                     gymEasy();
@@ -287,7 +287,6 @@ public class Main {
                 case 5:
                     System.out.println("função ginasio MTI");
                     break;
-
                 default:
                     print("opção invalida selecione novamente ");
                     optionDefault = 1;
@@ -316,7 +315,7 @@ public class Main {
 
         print(" pokemons do mestre : \n \n Multiplicador de socos \n divisor de chamas \n soma solar ");
 
-        questionPG();
+        questionPA();
 
         print("parabens voce venceu a sua primeira batalha esta pronto para proxima ? \n ");
         
@@ -341,9 +340,9 @@ public class Main {
 
         print("pokemons do Sensei : \n subtramon \n elektro bhaskara ");
 
-        questionPA();
+        questionPG();
 
-        print(" muito bem a parti de agora as coisas vao ficar mais dificeis a cada vitoria, entao ja se prepara e vamos nessa \n ");
+        print("muito bem a partir de agora as coisas vao ficar mais dificeis a cada vitoria, entao ja se prepara e vamos nessa \n ");
 
         divider();
     }
@@ -436,11 +435,9 @@ public class Main {
 
         } while (!(validate == 1 || validate == 2));
         if (validate == 1) {
-            handleOptions(OPTIONS_INIT);
+            handleOptions(OPTIONS_PLAY);
 
         }
-        handleOptions(OPTIONS_PLAY);
-
     }
 
     public void questionPA() {
@@ -483,11 +480,9 @@ public class Main {
 
         } while (!(validate == 1 || validate == 2));
         if (validate == 1) {
-            handleOptions(OPTIONS_INIT);
+            handleOptions(OPTIONS_PLAY);
 
         }
-        handleOptions(OPTIONS_PLAY);
-
     }
 
     public void questionFuncOne() {
@@ -501,7 +496,7 @@ public class Main {
             result = inputInt();
             divider();
             if (result != 5) {
-                print("resposta errada, volte ao menu e tente novamente");
+                print("resposta errada, volte ao começo e tente novamente");
                 divider();
                 validate = 1;
                 break;
@@ -524,11 +519,8 @@ public class Main {
 
         } while (!(validate == 1 || validate == 2));
         if (validate == 1) {
-            handleOptions(OPTIONS_INIT);
-
+            handleOptions(OPTIONS_PLAY);
         }
-        handleOptions(OPTIONS_PLAY);
-
     }
     public void questionFuncsecond() {
         int validate = 0, result = 0;
@@ -568,11 +560,9 @@ public class Main {
 
         } while (!(validate == 1 || validate == 2));
         if (validate == 1) {
-            handleOptions(OPTIONS_INIT);
+            handleOptions(OPTIONS_PLAY);
 
         }
-        handleOptions(OPTIONS_PLAY);
-
     }
 
     public void handleTrain() {
@@ -591,12 +581,12 @@ public class Main {
     }
 
     public void handleBag() {
-        System.out.println("handle bag");
+        // System.out.println("handle bag");
         handleOptions(OPTIONS_PLAY);
     }
 
     public void handleSave() {
-        System.out.println("handle save");
+        // System.out.println("handle save");
         saveGame();
         handleOptions(OPTIONS_SAVE);
     }
