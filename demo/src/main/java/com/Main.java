@@ -31,7 +31,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-
 public class Main {
     // GAME OPTIONS
     public static final int DEFAULT_TEXT_SPEED = 35; // in milliseconds;
@@ -181,12 +180,14 @@ public class Main {
 
     public void handleBattle() {
         int optionGym;
-        System.out.println("selecione o ginasio a qual quer enfrentra");
+        print("selecione o ginasio a qual quer enfrentra");
+        divider();
         for (int i = 0; i < GYM_NAME.length; i++) {
-            System.out.println((i + 1) + ")" + GYM_NAME[i]);
+            print((i + 1) + ")" + GYM_NAME[i]);
         }
-        optionGym = input.nextInt();
-        input.nextLine();
+        optionGym = inputInt();
+
+        divider();
         selectGym(optionGym);
 
         handleOptions(OPTIONS_PLAY);
@@ -197,75 +198,236 @@ public class Main {
         do {
             switch (optionGym) {
                 case 1:
-                    gymEasy();
+                    gymVeryEasy();
                     break;
                 case 2:
-                    System.out.println(GYM_NAME[1]);
+                    gymEasy();
+                    ;
                     break;
                 case 3:
-                    System.out.println(GYM_NAME[2]);
+                    gymMedium();
                     break;
                 case 4:
-                    System.out.println(GYM_NAME[3]);
+                    gymHard();
                     break;
                 case 5:
                     System.out.println("função ginasio MTI");
                     break;
 
                 default:
-                    System.out.println("opção invalida selecione novamente ");
+                    print("opção invalida selecione novamente ");
                     optionDefault = 1;
                     break;
             }
         } while (optionDefault == 1);
     }
 
-    public void gymEasy() {
-        System.out.printf(
-                "Seja BEM VINDO ao %s eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia",
-                GYM_NAME[0]);
+    public void gymVeryEasy() {
+        print(
+                "Seja BEM VINDO ao " + GYM_NAME[0]
+                        + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia\n");
+        divider();
         questionPG();
+        divider();
     }
-    public void medium(){
-        System.out.printf(
-                "Seja BEM VINDO ao %s eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia",
-                GYM_NAME[1]);
-        questionPG();
+
+    public void gymEasy() {
+        print(
+                "Seja BEM VINDO ao " + GYM_NAME[1]
+                        + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia\n");
+        divider();
+        questionPA();
+        divider();
+    }
+
+    public void gymMedium() {
+        print(
+                "Seja BEM VINDO ao " + GYM_NAME[2]
+                        + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia\n");
+        divider();
+        questionFuncOne();
+        divider();
+    }
+    public void gymHard() {
+        print(
+                "Seja BEM VINDO ao " + GYM_NAME[3]
+                        + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia\n");
+        divider();
+        questionFuncsecond();
+        divider();
     }
 
     public void questionPG() {
         int validate = 0, result = 0;
         do {
             // question 1
-            System.out.println("Qual é o proximo termo da Progressão geométrica:\n 3,6,12,...");
-            System.out.println("1)25\n2)12\n3)34\n4)24\n5)254");
-            result = input.nextInt();
-            input.nextLine();
+            print("Qual é o proximo termo da Progressão geométrica:\n 3,6,12,...");
+            divider();
+            print("1)25\n2)12\n3)34\n4)24\n5)254");
+            result = inputInt();
+            divider();
             if (result != 4) {
-                System.out.println("resposta errada, volte ao menu e tente novamente");
+                print("resposta errada, volte ao menu e tente novamente");
+                divider();
                 validate = 1;
                 break;
             }
             // question 2
-            System.out.println("Qual é o proximo termo da Progressão geométrica:\n 192,48,12,...");
-            System.out.println("1)5\n2)122\n3)4\n4)14\n5)3");
-            result = input.nextInt();
-            input.nextLine();
+            print("Qual é o proximo termo da Progressão geométrica:\n 192,48,12,...");
+            divider();
+            print("1)5\n2)122\n3)4\n4)14\n5)3");
+            result = inputInt();
+            divider();
             if (result != 5) {
-                System.out.println("resposta errada, volte ao menu e tente novamente");
+                print("resposta errada, volte ao menu e tente novamente");
                 validate = 1;
+                divider();
                 break;
             }
             // question 3
-            System.out.println("Qual é o 5º termo na Progressão:\n b(n)=-1()2^(n-1)");
-            System.out.println("1)-15\n2)-16\n3)15\n4)24\n5)-254");
-            result = input.nextInt();
-            input.nextLine();
+            print("Qual é o 5º termo na Progressão:\n b(n)=-1()2^(n-1)");
+            divider();
+            print("1)-15\n2)-16\n3)15\n4)24\n5)-254");
+            result = inputInt();
+            divider();
             if (result != 2) {
-                System.out.println("resposta errada, volte ao menu e tente novamente");
+                print("resposta errada, volte ao menu e tente novamente");
+                divider();
                 validate = 1;
                 break;
             }
+            validate = 2;
+
+        } while (!(validate == 1 || validate == 2));
+        if (validate == 1) {
+            handleOptions(OPTIONS_INIT);
+
+        }
+        handleOptions(OPTIONS_PLAY);
+
+    }
+
+    public void questionPA() {
+        int validate = 0, result = 0;
+        do {
+            // question 1
+            print("\nComplete a formula recursiva de g(n)");
+            divider();
+            print("g(n) = 25-49(n-1)");
+            print("g(1)=????");
+            print("g(n) = g(n-1)+?????");
+            divider();
+            print("1)25 e -49 \n2)23 e -25 \n3)-49 e 25 \n4)32 e -25 \n5)32 e -23");
+            result = inputInt();
+            divider();
+            if (result != 1) {
+                print("resposta errada, volte ao menu e tente novamente");
+                divider();
+                validate = 1;
+                break;
+            }
+            // question 2
+            print("Complete a formula recursiva de g(n)");
+            divider();
+            print("g(n) = 1+5(n-1)");
+            print("g(1)=????");
+            print("g(n) = g(n-1)+?????");
+            divider();
+            print("1)1 e 5 \n2)-1 e -5 \n3)-3 e 5 \n4)3 e -2 \n5)3 e -2");
+            result = inputInt();
+            divider();
+            if (result != 1) {
+                print("resposta errada, volte ao menu e tente novamente");
+                divider();
+                validate = 1;
+                break;
+            }
+
+            validate = 2;
+
+        } while (!(validate == 1 || validate == 2));
+        if (validate == 1) {
+            handleOptions(OPTIONS_INIT);
+
+        }
+        handleOptions(OPTIONS_PLAY);
+
+    }
+
+    public void questionFuncOne() {
+        int validate = 0, result = 0;
+        do {
+            // question 1
+            print("\nDescubra o valode de h(-18)=???");
+            print("sabendo que h(x)= 17 + x/6");
+            divider();
+            print("1)25 \n2)-14 \n3)-49 \n4)32 \n5)14");
+            result = inputInt();
+            divider();
+            if (result != 5) {
+                print("resposta errada, volte ao menu e tente novamente");
+                divider();
+                validate = 1;
+                break;
+            }
+            // question 2
+            print("\nDescubra o valode de f(30)=???");
+            print("sabendo que f(x)= -14 - 0,05x");
+            divider();
+            print("1)23 \n2)-2 \n3)-11 \n4)-1 \n5)1");
+            result = inputInt();
+            divider();
+            if (result != 4) {
+                print("resposta errada, volte ao menu e tente novamente");
+                divider();
+                validate = 1;
+                break;
+            }
+
+            validate = 2;
+
+        } while (!(validate == 1 || validate == 2));
+        if (validate == 1) {
+            handleOptions(OPTIONS_INIT);
+
+        }
+        handleOptions(OPTIONS_PLAY);
+
+    }
+    public void questionFuncsecond() {
+        int validate = 0, result = 0;
+        do {
+            // question 1
+            print("\nEncontre as raizes da função");
+            print("Insira as soluções da menor para a maior");
+            divider();
+            print("f(x) = (-x-2)(-2x-3)");
+            divider();
+            print("1)Menor= -4 Maior = -1/2 \n2)Menor= -2 Maior= -3/2 \n3)Menor=-1 Maior= 1 \n4)Menor= 4 Maior= 10 \n5)Menor= 1 Maior= 3");
+            result = inputInt();
+            divider();
+            if (result != 2) {
+                print("resposta errada, volte ao menu e tente novamente");
+                divider();
+                validate = 1;
+                break;
+            }
+            // question 2
+            print("\nEncontre as raizes da função");
+            print("Insira as soluções da menor para a maior");
+            divider();
+            print("(2x+4)(3x-2)=0");
+            divider();
+            print("1)Menor= -2 Maior = 2/3 \n2)Menor= -2 Maior= 3/2 \n3)Menor=-2 Maior= 4 \n4)Menor= -2/3 Maior= 1 \n5)Menor= 12 Maior= 21");
+            result = inputInt();
+            divider();
+            if (result != 1) {
+                print("resposta errada, volte ao menu e tente novamente");
+                divider();
+                validate = 1;
+                break;
+            }
+
             validate = 2;
 
         } while (!(validate == 1 || validate == 2));
@@ -443,6 +605,14 @@ public class Main {
             pokemon = chooseInitialPokemon();
         }
         return pokemon;
+    }
+
+    public static int inputInt() {
+        int i;
+        Scanner input = new Scanner(System.in);
+        i = input.nextInt();
+        return i;
+
     }
 
     // Ask user what they want to do
