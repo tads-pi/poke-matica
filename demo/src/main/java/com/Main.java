@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.UUID;
 import javax.crypto.SecretKey;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -103,10 +105,11 @@ public class Main {
     public Scanner input = new Scanner(System.in);
     public String inputS = "";
     // USER DATA
-    public String userName = "default";
-    public String pokemon = "default";
+    public String userUUID = "";
+    public String userName = "";
+    public String pokemon = "";
     public String[] badge = new String[] {
-            "default"
+            ""
     };
     // POKEMONS DATA
     public static final String[] STARTER_AVAILABLE_POKEMONS = new String[] {
@@ -120,7 +123,7 @@ public class Main {
     public final String THANKS_FOR_PLAYING = "Obrigado por jogar!";
     public final String NO_NAME = "";
     // FALAS - POKEMONS
-    public final String INTRODUCTION = "introdução para escolha de opções aqui";
+    public final String INTRODUCTION = "Bem vindx ao POKE-MATICA!!";
     public final String CHOOSE_POKEMON = "escolha um pet(escreva o nome do pet):";
     public final String POKEMON_NOT_AVAILABLE = "não temos esse pet escolha um entre as opções...";
     public final String POKEMON_CHALLENGE_CALL = "opa antes de de escolher %p, você precisa passar por um desafio!";
@@ -128,7 +131,7 @@ public class Main {
     // FALAS - STORY
     public final String STORY_01 = "Em uma aldeia onde %s mora a matemática é usada para todas as coisas.";
     public final String STORY_02 = "Existe um grande campeonato de batalhas de matemática onde cada participantes leva um pet para a batalha ... ";
-    public final String STORY_03 = "e ao acertar o resultado da conta o seu pet pode atacar o pet do adversário Esse campeonato envolve 10 anciões da aldeia muito bons em matemática...";
+    public final String STORY_03 = "Ao acertar o resultado da conta o seu pet pode atacar o pet do adversário Esse campeonato envolve 10 anciões da aldeia muito bons em matemática...";
     public final String STORY_04 = "Os participantes tem que vencer cada um deles para avançar e enfrentar o melhor dos melhores Sabendo disso %s da escola local que se considera muito bom em matemática decidiu participar.";
     public final String STORY_05 = "Ao chegar no ultimo ano da escola %s terá que escolher um pet entre 3 para começar sua aventura.";
     // FALAS - ERROR
@@ -183,6 +186,15 @@ public class Main {
     public DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
     // GAME
+    public void preStartGame() {
+        try {
+            loadSaves();
+            startGame();
+        } catch (Exception e) {
+            handleError(e);
+        }
+    }
+
     public void startGame() {
         print("\n" + INTRODUCTION);
         handleOptions(OPTIONS_INIT);
@@ -244,6 +256,7 @@ public class Main {
 
     public void handleSave() {
         System.out.println("handle save");
+        saveGame();
         handleOptions(OPTIONS_SAVE);
     }
 
@@ -538,6 +551,8 @@ public class Main {
         }
     }
 
+    //
+    // XML HANDLERS
     public void xmlWriter(String fileName, org.w3c.dom.Document xmlDoc) throws Exception {
         // Output Only
         DOMSource domSource = new DOMSource(xmlDoc);
@@ -585,60 +600,88 @@ public class Main {
         }
     }
 
-    public void loadGame(){
-        
+    public void loadSaves() throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        org.w3c.dom.Document doc = builder.parse(XML_SAVE_FILE_NAME);
+
+        NodeList user_list = doc.getElementsByTagName(XML_SAVE_MAIN_ELEMENT);
+
+        if (user_list.getLength() > 0) {
+            for (int i = 0; i < user_list.getLength(); i++) {
+                Node item = user_list.item(i);
+                if (item.getNodeType() == Node.ELEMENT_NODE) {
+                    org.w3c.dom.Element element = (org.w3c.dom.Element) item;
+                    NodeList data = element.getChildNodes();
+                    String lastLogin = element.getAttribute("date");
+
+                    System.out.println("SAVE " + (i + 1) + " " + lastLogin);
+
+                    for (int j = 0; j < data.getLength(); j++) {
+                        Node valueWrapper = data.item(j);
+                        if (valueWrapper.getNodeType() == Node.ELEMENT_NODE) {
+                            org.w3c.dom.Element value = (org.w3c.dom.Element) valueWrapper;
+
+                            String str = value.getTextContent().replace("\n", "");
+                            switch (value.getNodeName()) {
+                                case "name":
+                                    System.out.println("   NOME - " + str);
+                                    break;
+                                case "backpack":
+                                    System.out.println("   MOCHILA:");
+                                    NodeList list = value.getChildNodes();
+                                    for (int k = 0; k < list.getLength(); k++) {
+                                        Node e = list.item(k);
+                                        if (e.getNodeType() == Node.ELEMENT_NODE) {
+                                            org.w3c.dom.Element v = (org.w3c.dom.Element) e;
+                                            switch (v.getNodeName()) {
+                                                case "pokemon":
+                                                    System.out.println(
+                                                            "      Pokemons:\n           " + v.getTextContent());
+                                                    break;
+                                                case "badge":
+                                                    System.out.println(
+                                                            "      Insígnias:\n          " + v.getTextContent());
+
+                                                    break;
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+                    }
+                    divider();
+                }
+            }
+            // Node user = user_list.item(askSave() - 1);
+            System.out.println("selected save: " + askSave());
+            divider();
+        }
+
+    }
+
+    public int askSave() {
+        try {
+            speedPrint("Escolha o seu save.");
+            int save = Integer.parseInt(input.nextLine().charAt(0) + "");
+            return save;
+        } catch (Exception e) {
+            return askSave();
+        }
     }
 
     public void saveGame() {
         try {
+
+            // String userUUID = getUser()
+
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             org.w3c.dom.Document doc = builder.parse(XML_SAVE_FILE_NAME);
 
-            // addUser(doc);
+            addUser(doc);
+            // loadSaves();
 
-            // org.w3c.dom.Document xmlDoc = builder.newDocument();
-            // org.w3c.dom.Element rootElement, mainElement, userName, userUUID,
-            // userBackpack, backpackPokemon,
-            // backpackBadge;
-
-            // // Initialize
-            // rootElement = xmlDoc.createElement(XML_SAVE_ROOT_ELEMENT);
-            // mainElement = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT);
-            // userName = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_NAME);
-            // userUUID = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_UUID);
-            // userBackpack = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_BACKPACK);
-            // backpackPokemon =
-            // xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_BACKPACK_POKEMON);
-            // backpackBadge = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_BACKPACK_BADGE);
-
-            // // UserName
-            // Text userNameText = xmlDoc.createTextNode(this.userName);
-            // userName.appendChild(userNameText);
-            // // UserUUID
-            // UUID uuid = UUID.randomUUID();
-            // Text userUUIDText = xmlDoc.createTextNode(uuid + "");
-            // userUUID.appendChild(userUUIDText);
-            // // UserBackpack
-            // // Pokemon
-            // Text pokemonText = xmlDoc.createTextNode(this.pokemon);
-            // backpackPokemon.appendChild(pokemonText);
-            // // Badge
-            // for (String badg : badge) {
-            // Text badgeText = xmlDoc.createTextNode(badg);
-            // backpackBadge.appendChild(badgeText);
-            // }
-            // userBackpack.appendChild(backpackPokemon);
-            // userBackpack.appendChild(backpackBadge);
-
-            // // Appending
-            // mainElement.appendChild(userName);
-            // mainElement.appendChild(userUUID);
-            // mainElement.appendChild(userBackpack);
-            // rootElement.appendChild(mainElement);
-            // xmlDoc.appendChild(rootElement);
-
-            // xmlWriter(XML_SAVE_FILE_NAME, xmlDoc);
         } catch (Exception e) {
             handleError(e);
         }
@@ -680,12 +723,19 @@ public class Main {
         user.appendChild(userUUID);
         user.appendChild(userBackpack);
 
+        SimpleDateFormat CERTIFICATE_DATE_FORMAT = new SimpleDateFormat("dd/mm/yyyy");
+        SimpleDateFormat CERTIFICATE_HOUR_FORMAT = new SimpleDateFormat("HH:mm");
+        String dateNow = CERTIFICATE_DATE_FORMAT.format(new Date(System.currentTimeMillis()));
+        String hourNow = CERTIFICATE_HOUR_FORMAT.format(new Date(System.currentTimeMillis()));
+        user.setAttribute("date", dateNow + " " + hourNow);
+
         xmlDoc.getFirstChild().appendChild(user);
 
         xmlWriter(XML_SAVE_FILE_NAME, xmlDoc);
-
+        System.out.println("Usuário " + this.userName + " adicionado!");
     }
 
+    //
     // PDF HANDLERS
     public void handleCertificateCreator() {
         try {
@@ -769,6 +819,6 @@ public class Main {
     //
     public static void main(String args[]) {
         Main main = new Main();
-        main.saveGame();
+        main.preStartGame();
     }
 }
