@@ -239,7 +239,7 @@ public class Main {
     public void gymVeryEasy() {
         print(
                 "Seja BEM VINDO ao " + GYM_NAME[0]
-                        + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia\n");
+                        + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e receba Insígnia\n");
         divider();
 
         print(
@@ -258,7 +258,7 @@ public class Main {
 
         questionPG();
 
-        print("parabens voce venceu a sua primeira batalha esta pronto para proxima ?");
+        print("parabens voce venceu a sua primeira batalha esta pronto para proxima ? \n ");
         
         divider();
     }
@@ -266,26 +266,70 @@ public class Main {
     public void gymEasy() {
         print(
                 "Seja BEM VINDO ao " + GYM_NAME[1]
-                        + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia\n");
+                        + " você chegou ao segundo ginasio, ganhe a batalha matematica \n e receba uma Insígnia\n");
         divider();
+
+        print("Segundo mestre :\n nossa estão todos comentado sobre você depois que derotou o mestre do Ginasio nutella x Raizes \n ");
+
+        print( userName + " : \n fiquei sabendo dos comentarios da aldeia sobre mim, mas não acho que seja pra tanto o primeiro mestre foi muito facil de passar! \n ");
+
+        print("segundo mestre : \n oloko então você se acha muito bom né, me chamo sensei matematico e vou te encinar uma licão por falar que foi facil vencer meu amigo \n ");
+
+        print( userName + " : \n pode vir então , vamos lá e ve se não facilita pra mim quero perguntas mais dificeis \n ");
+
+        print("Sensei Matematico : \n então vamos nessa que eu vou acabar com a sua marra \n ");
+
+        print("pokemons do Sensei : \n subtramon \n elektro bhaskara ");
+
         questionPA();
+
+        print(" muito bem a parti de agora as coisas vao ficar mais dificeis a cada vitoria, entao ja se prepara e vamos nessa \n ");
+
         divider();
     }
 
     public void gymMedium() {
         print(
                 "Seja BEM VINDO ao " + GYM_NAME[2]
-                        + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia\n");
+                        + " você chegou ao terceiro ginasio, ganhe a batalha matematica \n e receba uma Insígnia\n");
         divider();
+
+        print("terceiro mestre : \n " + userName + " né ja estou sabendo que você é o menine cheio de marra que esta derrotando os metres da aldeia \n ");
+
+        print( userName +"  : \n sò porque sou mais superior que os mestres anteriores não significa que sou marrento aiai \n ");
+
+        print("ja que você chegou ate aki aposto uma vida extra com você que não vai conseguir me derrotar com minhas perguntas, se não eu nao me chamo Mestre dos numeros !! \n ");
+
+        print( userName + " : \n gostei da sua proposta, então ja vai se preparando para trocar o seu nome depois desse desafio hahaha \n ");
+
+        print("mestre dos numeros : \n então vamos nessa só não va chorar ao final da batalha \n ");
+
+        print("pokemons do mestre : \n \n Gyarados romanos \n Potencia hipnotica \n ");
+
         questionFuncOne();
+
+        print("nossa vc esta indo muito bem ja derrotou 2 grandes mestres da matematica mas agora as coisas vao fifar ainda mais dificeis \n ");
+
         divider();
     }
     public void gymHard() {
         print(
                 "Seja BEM VINDO ao " + GYM_NAME[3]
-                        + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia\n");
+                        + " agora você chegou ao quarto ginasio, ganhe essa batalha matematica \n e recceba uma Insígnia\n");
         divider();
+
+        print("quarto merestre : \n nossa poucas pessoas chegaram a este nivel você tem um grande potencial de ganhar do grao mestre \n ");
+
+       print( userName + " : \n eu sei disso ele que me aguante primeiro vou derrotar você, então fique focado na nossa batalha e me faça perguntas dificeis dessa vez, pra você nao passar vergonha \n ");
+
+       print("quarto merestre : \n muito ousado você meu jovem eu sou o grande prodigio e vou te encinar uma licão \n ");
+
+       print("os pokemons do mestre prodigio são : \n \n numero fantasma \n rocha binaria \n ");
+
         questionFuncsecond();
+
+        print("agora você esta na final então se prepara que la vem chumbo grosso você enfrentara o grão mestre e o seu pokemon lendario \n ");
+
         divider();
     }
 
