@@ -31,7 +31,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-
 public class Main {
     // GAME OPTIONS
     public static final int DEFAULT_TEXT_SPEED = 35; // in milliseconds;
@@ -83,11 +82,11 @@ public class Main {
     };
     // GYM DATA
     public static final String[] GYM_NAME = new String[] {
-        "ginasio nutella x RAIZES",
-        "ginasio santuario matematico",
-        "ginasio numerico",
-        "ginasio MTI",
-        "ginasio Do Grão Mestre",
+            "ginasio nutella x RAIZES",
+            "ginasio santuario matematico",
+            "ginasio numerico",
+            "ginasio MTI",
+            "ginasio Do Grão Mestre",
     };
 
     // FALAS - USER
@@ -222,11 +221,29 @@ public class Main {
 
     public void gymEasy() {
         System.out.printf(
-                "Seja BEM VINDO ao %s eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia",
+                "Seja BEM VINDO ao %s eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia \n ",
                 GYM_NAME[0]);
+
+        print(
+                "seja bem vindo " + userName
+                        + " a sua primeira batalha de matematica pokemon, seu primeiro adiversario sera o mestre executor de raizes vamos nessa \n ");
+
+        print(
+                "executor de raizes: \n óla menine, então é você que todo mundo esta falando na aldeia que esta com coragem o suficiente para desafiar os grandas mestres da matematica da cidade ? \n ");
+
+        print(userName + " : \n Sim prazer me chamo " + userName + " e vim para derotar todos vocês \n ");
+
+        print(
+                "executor de raizes: \n então vamos logo para sua primeira batalha ja que esta tão confiante assim, esses sao os meus pokemons!! \n");
+
+        print(" pokemons do mestre : \n \n Multiplicador de socos \n divisor de chamas \n soma solar ");
+
         questionPG();
+
+        print("parabens voce venceu a sua primeira batalha esta pronto para proxima ?");
     }
-    public void medium(){
+
+    public void medium() {
         System.out.printf(
                 "Seja BEM VINDO ao %s eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia",
                 GYM_NAME[1]);
