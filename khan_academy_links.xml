@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <topics>
     </topic>
-    <topic type="PA" id="12">
-        <slug>Lógica com lego: </slug>
-        <url>https://pt.khanacademy.org/math/em-mat-algebra2/x1d9e5bc8bded7b21:progressao-aritmetica-p-a</url>
-    </topic>
-    <topic type="PG" id="13">
+    <topic type="PG" id="12">
         <slug>Lógica com lego: </slug>
         <url>https://pt.khanacademy.org/math/em-mat-algebra2/x1d9e5bc8bded7b21:progressao-geometrica-p-g</url>
     </topic>
