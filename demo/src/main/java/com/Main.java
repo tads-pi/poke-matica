@@ -62,7 +62,6 @@ public class Main {
     public static final int OPTION_SAVE = 8;
     public static final int OPTION_PLAY_EXIT = 9;
     public static final int OPTION_VALIDATE_CERTIFICATE = 10;
-    public static final int OPTION_TRAIN_LOGIC = 11;
     public static final int OPTION_TRAIN_PA = 12;
     public static final int OPTION_TRAIN_PG = 13;
     public static final int OPTION_TRAIN_FIRST_DEGREE = 14;
@@ -92,7 +91,6 @@ public class Main {
     }
     public static final Map<Integer, String> OPTIONS_TRAIN = new LinkedHashMap<>();
     static {
-        OPTIONS_TRAIN.put(OPTION_TRAIN_LOGIC, "Lógica");
         OPTIONS_TRAIN.put(OPTION_TRAIN_PA, "Prograssão Aritimética");
         OPTIONS_TRAIN.put(OPTION_TRAIN_PG, "Prograssão Geométrica");
         OPTIONS_TRAIN.put(OPTION_TRAIN_FIRST_DEGREE, "Funções de Primeiro Grau");
@@ -139,7 +137,7 @@ public class Main {
     // FALAS - STORY
     public final String STORY_01 = "Em uma aldeia onde %s mora a matemática é usada para todas as coisas.";
     public final String STORY_02 = "Existe um grande campeonato de batalhas de matemática onde cada participantes leva um pet para a batalha ... ";
-    public final String STORY_03 = "Ao acertar o resultado da conta o seu pet pode atacar o pet do adversário Esse campeonato envolve 10 anciões da aldeia muito bons em matemática...";
+    public final String STORY_03 = "Ao acertar o resultado da conta o seu pet pode atacar o pet do adversário Esse campeonato envolve 5 Mestres da aldeia muito bons em matemática...";
     public final String STORY_04 = "Os participantes tem que vencer cada um deles para avançar e enfrentar o melhor dos melhores Sabendo disso %s da escola local que se considera muito bom em matemática decidiu participar.";
     public final String STORY_05 = "Ao chegar no ultimo ano da escola %s terá que escolher um pet entre 3 para começar sua aventura.";
     // FALAS - ERROR
@@ -160,7 +158,7 @@ public class Main {
     public final String CERTIFICATE_NAME = "certificate.pdf";
     public final String CERTIFICATE_ABSOLUTE_PATH = System.getProperty("user.home") + "/Desktop/" + CERTIFICATE_NAME;
     public final String IMAGE_PATH = "images/img.png";
-    public final String CERTIFICATE_TEXT_TITLE = "TÍTULO";
+    public final String CERTIFICATE_TEXT_TITLE = "Certificado poke-matica";
     public final String CERTIFICATE_TEXT_PARAGRAPH = "Certificamos (não oficialmente) que %s concluiu o curso POKE-MATICA GINASIO DAS FUNCOES com sucesso no dia %d às %h";
     public final String CERTIFICATE_JWT_TEXT = "Token do certificado";
 
@@ -315,7 +313,7 @@ public class Main {
 
         print(" pokemons do mestre : \n \n Multiplicador de socos \n divisor de chamas \n soma solar ");
 
-        questionPA();
+        questionPG();
 
         print("parabens voce venceu a sua primeira batalha esta pronto para proxima ? \n ");
         
@@ -340,7 +338,7 @@ public class Main {
 
         print("pokemons do Sensei : \n subtramon \n elektro bhaskara ");
 
-        questionPG();
+        questionPA();
 
         print("muito bem a partir de agora as coisas vao ficar mais dificeis a cada vitoria, entao ja se prepara e vamos nessa \n ");
 
