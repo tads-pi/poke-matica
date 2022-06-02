@@ -30,7 +30,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import javafx.scene.input.PickResult;
+
 
 public class Main {
     // GAME OPTIONS
@@ -81,7 +81,7 @@ public class Main {
             "Squirtle",
             "1"
     };
-    //GYM DATA
+    // GYM DATA
     public static final String[] GYM_NAME = new String[] {
         "ginasio nutella x RAIZES",
         "ginasio santuario matematico",
@@ -183,16 +183,16 @@ public class Main {
         int optionGym;
         System.out.println("selecione o ginasio a qual quer enfrentra");
         for (int i = 0; i < GYM_NAME.length; i++) {
-            System.out.println((i+1)+")"+GYM_NAME[i]);
+            System.out.println((i + 1) + ")" + GYM_NAME[i]);
         }
         optionGym = input.nextInt();
         input.nextLine();
         selectGym(optionGym);
-         
+
         handleOptions(OPTIONS_PLAY);
     }
 
-    public void selectGym(int optionGym){
+    public void selectGym(int optionGym) {
         int optionDefault = 0;
         do {
             switch (optionGym) {
@@ -211,62 +211,69 @@ public class Main {
                 case 5:
                     System.out.println("função ginasio MTI");
                     break;
-            
-                default: System.out.println("opção invalida selecione novamente ");
-                            optionDefault = 1;
+
+                default:
+                    System.out.println("opção invalida selecione novamente ");
+                    optionDefault = 1;
                     break;
             }
         } while (optionDefault == 1);
     }
 
-    public void gymEasy(){
-        System.out.printf("Seja BEM VINDO ao %s eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia",GYM_NAME[0]);
+    public void gymEasy() {
+        System.out.printf(
+                "Seja BEM VINDO ao %s eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia",
+                GYM_NAME[0]);
         questionPG();
     }
-    public void questionPG(){
-        int validate = 0, result =0;
+    public void medium(){
+        System.out.printf(
+                "Seja BEM VINDO ao %s eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia",
+                GYM_NAME[1]);
+        questionPG();
+    }
+
+    public void questionPG() {
+        int validate = 0, result = 0;
         do {
-            //question 1
-            System.out.println("Qual é o proximo termo da Progressão geométrica:\n 3,6,12,..." );
+            // question 1
+            System.out.println("Qual é o proximo termo da Progressão geométrica:\n 3,6,12,...");
             System.out.println("1)25\n2)12\n3)34\n4)24\n5)254");
             result = input.nextInt();
             input.nextLine();
-            if(result !=4){
+            if (result != 4) {
                 System.out.println("resposta errada, volte ao menu e tente novamente");
                 validate = 1;
-                break;    
+                break;
             }
-            //question 2    
-            System.out.println("Qual é o proximo termo da Progressão geométrica:\n 192,48,12,..." );
+            // question 2
+            System.out.println("Qual é o proximo termo da Progressão geométrica:\n 192,48,12,...");
             System.out.println("1)5\n2)122\n3)4\n4)14\n5)3");
             result = input.nextInt();
             input.nextLine();
-            if(result !=5){
+            if (result != 5) {
                 System.out.println("resposta errada, volte ao menu e tente novamente");
                 validate = 1;
                 break;
-                }
-            //question 3   
-            System.out.println("Qual é o 5º termo na Progressão:\n b(n)=-1()2^(n-1)" );
+            }
+            // question 3
+            System.out.println("Qual é o 5º termo na Progressão:\n b(n)=-1()2^(n-1)");
             System.out.println("1)-15\n2)-16\n3)15\n4)24\n5)-254");
             result = input.nextInt();
             input.nextLine();
-            if(result !=2){
+            if (result != 2) {
                 System.out.println("resposta errada, volte ao menu e tente novamente");
                 validate = 1;
                 break;
-            }validate = 2;
+            }
+            validate = 2;
 
-            
         } while (!(validate == 1 || validate == 2));
         if (validate == 1) {
             handleOptions(OPTIONS_INIT);
 
-        } 
-            handleOptions(OPTIONS_PLAY);
-            
-        
-
+        }
+        handleOptions(OPTIONS_PLAY);
 
     }
 
@@ -353,8 +360,6 @@ public class Main {
             System.out.println(ERROR_DEFAULT_MESSAGE);
         }
     }
-
-    
 
     /*------------------------------------------------------------------------------------------------*/
 
