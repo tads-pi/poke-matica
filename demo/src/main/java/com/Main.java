@@ -82,11 +82,11 @@ public class Main {
     };
     // GYM DATA
     public static final String[] GYM_NAME = new String[] {
-            "ginasio1",
-            "ginasio2",
-            "ginasio3",
-            "ginasio4",
+            "ginasio nutella x RAIZES",
+            "ginasio santuario matematico",
+            "ginasio numerico",
             "ginasio MTI",
+            "ginasio Do Grão Mestre",
     };
 
     // FALAS - USER
@@ -152,8 +152,22 @@ public class Main {
     // Handle the introduction, telling the game story and get user name
     public void handleIntroduction() {
         if (userName == NO_NAME) {
-            System.out.print(ASK_NAME);
+            print(ASK_NAME);
             userName = input.nextLine();
+
+            print("você tem certeza que o nome esta correto ? (sim para confirmar n para não) ");
+
+            String yes = "sim";
+
+            String validacao = input.nextLine();
+
+            if (validacao.equalsIgnoreCase(yes)) {
+
+            } else {
+                print(ASK_NAME);
+                userName = input.nextLine();
+            }
+
         }
         String inlineStory = STORY_01 + "\n" + STORY_02 + "\n" + STORY_03 + "\n" +
                 STORY_04 + "\n" + STORY_05;
@@ -227,7 +241,25 @@ public class Main {
                 "Seja BEM VINDO ao " + GYM_NAME[0]
                         + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e ganhe uma Insígnia\n");
         divider();
+
+        print(
+                "seja bem vindo " + userName
+                        + " a sua primeira batalha de matematica pokemon, seu primeiro adiversario sera o mestre executor de raizes vamos nessa \n ");
+
+        print(
+                "executor de raizes: \n óla menine, então é você que todo mundo esta falando na aldeia que esta com coragem o suficiente para desafiar os grandas mestres da matematica da cidade ? \n ");
+
+        print(userName + " : \n Sim prazer me chamo " + userName + " e vim para derotar todos vocês \n ");
+
+        print(
+                "executor de raizes: \n então vamos logo para sua primeira batalha ja que esta tão confiante assim, esses sao os meus pokemons!! \n");
+
+        print(" pokemons do mestre : \n \n Multiplicador de socos \n divisor de chamas \n soma solar ");
+
         questionPG();
+
+        print("parabens voce venceu a sua primeira batalha esta pronto para proxima ?");
+        
         divider();
     }
 
