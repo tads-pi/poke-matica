@@ -1,9 +1,9 @@
 package com;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -12,15 +12,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.crypto.SecretKey;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.w3c.dom.Text;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -97,8 +103,11 @@ public class Main {
     public Scanner input = new Scanner(System.in);
     public String inputS = "";
     // USER DATA
-    public String userName = "";
-    public String pokemon = "";
+    public String userName = "default";
+    public String pokemon = "default";
+    public String[] badge = new String[] {
+            "default"
+    };
     // POKEMONS DATA
     public static final String[] STARTER_AVAILABLE_POKEMONS = new String[] {
             "Bulbassauro",
@@ -159,6 +168,19 @@ public class Main {
     /*------------------------------------------------------------------------------------------------*/
     /*---------------JWT AND CERTIFICATE AREA---------------JWT AND CERTIFICATE AREA------------------*/
     /*------------------------------------------------------------------------------------------------*/
+    /*------------------------------------------------------------------------------------------------*/
+    /*----------------XML AND SAVE GAME AREA-----------------XML AND SAVE GAME AREA-------------------*/
+    /*------------------------------------------------------------------------------------------------*/
+
+    public final String XML_SAVE_FILE_NAME = "save.xml";
+    public final String XML_SAVE_ROOT_ELEMENT = "save";
+    public final String XML_SAVE_MAIN_ELEMENT = "user";
+    public final String XML_SAVE_MAIN_ELEMENT_NAME = "name";
+    public final String XML_SAVE_MAIN_ELEMENT_UUID = "uuid";
+    public final String XML_SAVE_MAIN_ELEMENT_BACKPACK = "backpack";
+    public final String XML_SAVE_MAIN_ELEMENT_BACKPACK_POKEMON = "pokemon";
+    public final String XML_SAVE_MAIN_ELEMENT_BACKPACK_BADGE = "badge";
+    public DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
     // GAME
     public void startGame() {
@@ -277,6 +299,7 @@ public class Main {
             System.out.println(ERROR_NUMBER_FORMAT_EXCEPTION);
         } catch (Exception e1) {
             System.out.println(ERROR_DEFAULT_MESSAGE);
+            System.out.println("Erro: " + e);
         }
     }
 
@@ -515,15 +538,27 @@ public class Main {
         }
     }
 
-    //
-    public void train(int TYPE) throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        org.w3c.dom.Document doc = builder.parse(KHAN_ACADEMY_LINKS_FILE);
+    public void xmlWriter(String fileName, org.w3c.dom.Document xmlDoc) throws Exception {
+        // Output Only
+        DOMSource domSource = new DOMSource(xmlDoc);
+        File file = new File(fileName);
+        Result result = new StreamResult(file);
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
 
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.CDATA_SECTION_ELEMENTS, "yes");
+        transformer.transform(domSource, result);
+    }
+
+    public void train(int TYPE) throws Exception {
         final String QUERY_TOPIC = "topic";
         final String QUERY_ID = "id";
 
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        org.w3c.dom.Document doc = builder.parse(KHAN_ACADEMY_LINKS_FILE);
         NodeList topic_list = doc.getElementsByTagName(QUERY_TOPIC);
 
         for (int i = 0; i < topic_list.getLength(); i++) {
@@ -548,6 +583,107 @@ public class Main {
                 }
             }
         }
+    }
+
+    public void loadGame(){
+        
+    }
+
+    public void saveGame() {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            org.w3c.dom.Document doc = builder.parse(XML_SAVE_FILE_NAME);
+
+            // addUser(doc);
+
+            // org.w3c.dom.Document xmlDoc = builder.newDocument();
+            // org.w3c.dom.Element rootElement, mainElement, userName, userUUID,
+            // userBackpack, backpackPokemon,
+            // backpackBadge;
+
+            // // Initialize
+            // rootElement = xmlDoc.createElement(XML_SAVE_ROOT_ELEMENT);
+            // mainElement = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT);
+            // userName = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_NAME);
+            // userUUID = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_UUID);
+            // userBackpack = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_BACKPACK);
+            // backpackPokemon =
+            // xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_BACKPACK_POKEMON);
+            // backpackBadge = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_BACKPACK_BADGE);
+
+            // // UserName
+            // Text userNameText = xmlDoc.createTextNode(this.userName);
+            // userName.appendChild(userNameText);
+            // // UserUUID
+            // UUID uuid = UUID.randomUUID();
+            // Text userUUIDText = xmlDoc.createTextNode(uuid + "");
+            // userUUID.appendChild(userUUIDText);
+            // // UserBackpack
+            // // Pokemon
+            // Text pokemonText = xmlDoc.createTextNode(this.pokemon);
+            // backpackPokemon.appendChild(pokemonText);
+            // // Badge
+            // for (String badg : badge) {
+            // Text badgeText = xmlDoc.createTextNode(badg);
+            // backpackBadge.appendChild(badgeText);
+            // }
+            // userBackpack.appendChild(backpackPokemon);
+            // userBackpack.appendChild(backpackBadge);
+
+            // // Appending
+            // mainElement.appendChild(userName);
+            // mainElement.appendChild(userUUID);
+            // mainElement.appendChild(userBackpack);
+            // rootElement.appendChild(mainElement);
+            // xmlDoc.appendChild(rootElement);
+
+            // xmlWriter(XML_SAVE_FILE_NAME, xmlDoc);
+        } catch (Exception e) {
+            handleError(e);
+        }
+    }
+
+    public void addUser(org.w3c.dom.Document xmlDoc) throws Exception {
+        org.w3c.dom.Element user, userName, userUUID, userBackpack, backpackPokemon,
+                backpackBadge;
+
+        // Initialize
+        user = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT);
+        userName = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_NAME);
+        userUUID = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_UUID);
+        userBackpack = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_BACKPACK);
+        backpackPokemon = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_BACKPACK_POKEMON);
+        backpackBadge = xmlDoc.createElement(XML_SAVE_MAIN_ELEMENT_BACKPACK_BADGE);
+
+        // UserName
+        Text userNameText = xmlDoc.createTextNode(this.userName);
+        userName.appendChild(userNameText);
+        // UserUUID
+        UUID uuid = UUID.randomUUID();
+        Text userUUIDText = xmlDoc.createTextNode(uuid + "");
+        userUUID.appendChild(userUUIDText);
+        // UserBackpack
+        // Pokemon
+        Text pokemonText = xmlDoc.createTextNode(this.pokemon);
+        backpackPokemon.appendChild(pokemonText);
+        // Badge
+        for (String badg : badge) {
+            Text badgeText = xmlDoc.createTextNode(badg);
+            backpackBadge.appendChild(badgeText);
+        }
+        userBackpack.appendChild(backpackPokemon);
+        userBackpack.appendChild(backpackBadge);
+
+        // Appending
+        user.appendChild(userName);
+        user.appendChild(userUUID);
+        user.appendChild(userBackpack);
+
+        xmlDoc.getFirstChild().appendChild(user);
+
+        xmlWriter(XML_SAVE_FILE_NAME, xmlDoc);
+
     }
 
     // PDF HANDLERS
@@ -633,6 +769,6 @@ public class Main {
     //
     public static void main(String args[]) {
         Main main = new Main();
-        main.handleTrain();
+        main.saveGame();
     }
 }
