@@ -3,16 +3,24 @@ package com;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
 import javax.crypto.SecretKey;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -34,6 +42,7 @@ import io.jsonwebtoken.security.Keys;
 public class Main {
     // GAME OPTIONS
     public static final int DEFAULT_TEXT_SPEED = 35; // in milliseconds;
+    public static final String KHAN_ACADEMY_LINKS_FILE = "khan_academy_links.xml"; // in milliseconds;
 
     public static final int OPTION_INTRODUCTION = 1;
     public static final int OPTION_PLAY = 2;
@@ -45,8 +54,15 @@ public class Main {
     public static final int OPTION_SAVE = 8;
     public static final int OPTION_PLAY_EXIT = 9;
     public static final int OPTION_VALIDATE_CERTIFICATE = 10;
+    public static final int OPTION_TRAIN_LOGIC = 11;
+    public static final int OPTION_TRAIN_PA = 12;
+    public static final int OPTION_TRAIN_PG = 13;
+    public static final int OPTION_TRAIN_FIRST_DEGREE = 14;
+    public static final int OPTION_TRAIN_SECOND_DEGREE = 15;
+    public static final int OPTION_TRAIN_EXPONENTIAL = 16;
+    public static final int OPTION_TRAIN_EXIT = 17;
 
-    public static final Map<Integer, String> OPTIONS_INIT = new HashMap<>();
+    public static final Map<Integer, String> OPTIONS_INIT = new LinkedHashMap<>();
     static {
         OPTIONS_INIT.put(OPTION_INTRODUCTION, "Introdução");
         OPTIONS_INIT.put(OPTION_PLAY, "Jogar");
@@ -54,17 +70,27 @@ public class Main {
         OPTIONS_INIT.put(OPTION_EXIT, "Sair");
         OPTIONS_INIT.put(OPTION_VALIDATE_CERTIFICATE, "Validar Certificado");
     }
-    public static final Map<Integer, String> OPTIONS_PLAY = new HashMap<>();
+    public static final Map<Integer, String> OPTIONS_PLAY = new LinkedHashMap<>();
     static {
         OPTIONS_PLAY.put(OPTION_BATTLE, "Lutar em ginásios");
         OPTIONS_PLAY.put(OPTION_TRAIN, "Treinar");
         OPTIONS_PLAY.put(OPTION_BAG, "Mochila");
         OPTIONS_PLAY.put(OPTION_SAVE, "Salvar");
     }
-    public static final Map<Integer, String> OPTIONS_SAVE = new HashMap<>();
+    public static final Map<Integer, String> OPTIONS_SAVE = new LinkedHashMap<>();
     static {
         OPTIONS_SAVE.put(OPTION_PLAY, "Continuar Jogando");
         OPTIONS_SAVE.put(OPTION_PLAY_EXIT, "Sair");
+    }
+    public static final Map<Integer, String> OPTIONS_TRAIN = new LinkedHashMap<>();
+    static {
+        OPTIONS_TRAIN.put(OPTION_TRAIN_LOGIC, "Lógica");
+        OPTIONS_TRAIN.put(OPTION_TRAIN_PA, "Prograssão Aritimética");
+        OPTIONS_TRAIN.put(OPTION_TRAIN_PG, "Prograssão Geométrica");
+        OPTIONS_TRAIN.put(OPTION_TRAIN_FIRST_DEGREE, "Funções de Primeiro Grau");
+        OPTIONS_TRAIN.put(OPTION_TRAIN_SECOND_DEGREE, "Funções de Segundo Grau");
+        OPTIONS_TRAIN.put(OPTION_TRAIN_EXPONENTIAL, "Funções Exponenciais");
+        OPTIONS_TRAIN.put(OPTION_TRAIN_EXIT, "Sair");
     }
 
     // INPUTS
@@ -472,8 +498,18 @@ public class Main {
     }
 
     public void handleTrain() {
-        System.out.println("handle train");
-        handleOptions(OPTIONS_PLAY);
+        int selectedOption = handleOptions(OPTIONS_TRAIN);
+
+        if (selectedOption == OPTION_TRAIN_EXIT) {
+            handleOptions(OPTIONS_PLAY);
+        } else {
+            try {
+                train(selectedOption);
+            } catch (Exception e) {
+                handleError(e);
+            }
+            handleTrain();
+        }
     }
 
     public void handleBag() {
@@ -691,7 +727,7 @@ public class Main {
     }
 
     // Calls getSelectedOption and redirects to the function selected
-    public void handleOptions(Map<Integer, String> options) {
+    public int handleOptions(Map<Integer, String> options) {
         // Getting selected option between options
         int selectedOption = getSelectedOption(options);
         switch (selectedOption) {
@@ -726,6 +762,8 @@ public class Main {
                 handleCertificateValidation();
                 break;
         }
+
+        return selectedOption;
     }
 
     // JWT HANDLERS
@@ -797,6 +835,40 @@ public class Main {
     }
 
     //
+    public void train(int TYPE) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        org.w3c.dom.Document doc = builder.parse(KHAN_ACADEMY_LINKS_FILE);
+
+        final String QUERY_TOPIC = "topic";
+        final String QUERY_ID = "id";
+
+        NodeList topic_list = doc.getElementsByTagName(QUERY_TOPIC);
+
+        for (int i = 0; i < topic_list.getLength(); i++) {
+            Node item = topic_list.item(i);
+
+            if (item.getNodeType() == Node.ELEMENT_NODE) {
+                org.w3c.dom.Element element = (org.w3c.dom.Element) item;
+                String id = element.getAttribute(QUERY_ID);
+                // Comparing if it's the user selected options
+                if (id.equalsIgnoreCase(TYPE + "")) {
+                    NodeList data = element.getChildNodes();
+                    for (int j = 0; j < data.getLength(); j++) {
+                        Node valueWrapper = data.item(j);
+                        if (valueWrapper.getNodeType() == Node.ELEMENT_NODE) {
+                            org.w3c.dom.Element value = (org.w3c.dom.Element) valueWrapper;
+                            String str = String.valueOf(value.getTextContent());
+
+                            System.out.print(str);
+                        }
+                    }
+                    System.out.println();
+                }
+            }
+        }
+    }
+
     // PDF HANDLERS
     public void handleCertificateCreator() {
         try {
@@ -880,6 +952,6 @@ public class Main {
     //
     public static void main(String args[]) {
         Main main = new Main();
-        main.startGame();
+        main.handleTrain();
     }
 }
