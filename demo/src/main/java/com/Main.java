@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.crypto.SecretKey;
+import javax.management.openmbean.OpenType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -123,6 +124,15 @@ public class Main {
             "ginasio MTI",
             "ginasio Do Grão Mestre",
     };
+    public static final String[] INSIGNIA = new String[] {
+            "Nenhuma insignia",
+            "㊀",
+            "㊁",
+            "㊂",
+            "㊃",
+            "㊈",
+    };
+    public int valueWin = 0;
 
     // FALAS - USER
     public final String ASK_NAME = "insira seu nome:";
@@ -270,20 +280,50 @@ public class Main {
             switch (optionGym) {
                 case 1:
                     gymVeryEasy();
-                    handleCertificateCreator();
+                    valueWin = 1;
                     break;
                 case 2:
-                    gymEasy();
-                    ;
+                    if (valueWin == 1) {
+                        gymEasy();
+                        valueWin = 2;
+                        break;
+                    } 
+                        print("esse ginasio ainda não foi desbloqueado");
+                        handleBattle();
+                        
+                    
                     break;
+
                 case 3:
-                    gymMedium();
+                    if (valueWin == 2) {
+                        gymMedium();
+                        valueWin = 3;
+                    } else {
+                        print("esse ginasio ainda não foi desbloqueado");
+                        handleBattle();
+                    }
+
                     break;
                 case 4:
-                    gymHard();
+                    if (valueWin == 3) {
+                        gymHard();
+                        valueWin = 4;
+                    } else {
+                        print("esse ginasio ainda não foi desbloqueado");
+                        handleBattle();
+                    }
+
                     break;
                 case 5:
-                    System.out.println("função ginasio MTI");
+                    if (valueWin == 3) {
+                        print(
+                                "Parabens por ter vencido os 5 ginasios e ter se tornando um mestre Pokematica");
+                        valueWin = 5;
+                        handleCertificateCreator();
+                    } else {print("esse ginasio ainda não foi desbloqueado");
+                        handleBattle();
+                    }
+
                     break;
                 default:
                     print("opção invalida selecione novamente ");
@@ -316,7 +356,7 @@ public class Main {
         questionPG();
 
         print("parabens voce venceu a sua primeira batalha esta pronto para proxima ? \n ");
-        
+
         divider();
     }
 
@@ -328,11 +368,13 @@ public class Main {
 
         print("Segundo mestre :\n nossa estão todos comentado sobre você depois que derotou o mestre do Ginasio nutella x Raizes \n ");
 
-        print( userName + " : \n fiquei sabendo dos comentarios da aldeia sobre mim, mas não acho que seja pra tanto o primeiro mestre foi muito facil de passar! \n ");
+        print(userName
+                + " : \n fiquei sabendo dos comentarios da aldeia sobre mim, mas não acho que seja pra tanto o primeiro mestre foi muito facil de passar! \n ");
 
         print("segundo mestre : \n oloko então você se acha muito bom né, me chamo sensei matematico e vou te encinar uma licão por falar que foi facil vencer meu amigo \n ");
 
-        print( userName + " : \n pode vir então , vamos lá e ve se não facilita pra mim quero perguntas mais dificeis \n ");
+        print(userName
+                + " : \n pode vir então , vamos lá e ve se não facilita pra mim quero perguntas mais dificeis \n ");
 
         print("Sensei Matematico : \n então vamos nessa que eu vou acabar com a sua marra \n ");
 
@@ -351,13 +393,16 @@ public class Main {
                         + " você chegou ao terceiro ginasio, ganhe a batalha matematica \n e receba uma Insígnia\n");
         divider();
 
-        print("terceiro mestre : \n " + userName + " né ja estou sabendo que você é o menine cheio de marra que esta derrotando os metres da aldeia \n ");
+        print("terceiro mestre : \n " + userName
+                + " né ja estou sabendo que você é o menine cheio de marra que esta derrotando os metres da aldeia \n ");
 
-        print( userName +"  : \n sò porque sou mais superior que os mestres anteriores não significa que sou marrento aiai \n ");
+        print(userName
+                + "  : \n sò porque sou mais superior que os mestres anteriores não significa que sou marrento aiai \n ");
 
         print("ja que você chegou ate aki aposto uma vida extra com você que não vai conseguir me derrotar com minhas perguntas, se não eu nao me chamo Mestre dos numeros !! \n ");
 
-        print( userName + " : \n gostei da sua proposta, então ja vai se preparando para trocar o seu nome depois desse desafio hahaha \n ");
+        print(userName
+                + " : \n gostei da sua proposta, então ja vai se preparando para trocar o seu nome depois desse desafio hahaha \n ");
 
         print("mestre dos numeros : \n então vamos nessa só não va chorar ao final da batalha \n ");
 
@@ -369,6 +414,7 @@ public class Main {
 
         divider();
     }
+
     public void gymHard() {
         print(
                 "Seja BEM VINDO ao " + GYM_NAME[3]
@@ -377,11 +423,12 @@ public class Main {
 
         print("quarto merestre : \n nossa poucas pessoas chegaram a este nivel você tem um grande potencial de ganhar do grao mestre \n ");
 
-       print( userName + " : \n eu sei disso ele que me aguante primeiro vou derrotar você, então fique focado na nossa batalha e me faça perguntas dificeis dessa vez, pra você nao passar vergonha \n ");
+        print(userName
+                + " : \n eu sei disso ele que me aguante primeiro vou derrotar você, então fique focado na nossa batalha e me faça perguntas dificeis dessa vez, pra você nao passar vergonha \n ");
 
-       print("quarto merestre : \n muito ousado você meu jovem eu sou o grande prodigio e vou te encinar uma licão \n ");
+        print("quarto merestre : \n muito ousado você meu jovem eu sou o grande prodigio e vou te encinar uma licão \n ");
 
-       print("os pokemons do mestre prodigio são : \n \n numero fantasma \n rocha binaria \n ");
+        print("os pokemons do mestre prodigio são : \n \n numero fantasma \n rocha binaria \n ");
 
         questionFuncsecond();
 
@@ -520,6 +567,7 @@ public class Main {
             handleOptions(OPTIONS_PLAY);
         }
     }
+
     public void questionFuncsecond() {
         int validate = 0, result = 0;
         do {
