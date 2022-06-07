@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <save>
+    
+    <user date="06/25/2022 15:25">
+        <name>Guilherme</name>
+        <uuid>fd8a392a-6689-47c1-8bcb-949a36ef0241</uuid>
+        <backpack>
+            <pokemon>charmander</pokemon>
+            <badge/>
+        </backpack>
+    </user>
 </save>
