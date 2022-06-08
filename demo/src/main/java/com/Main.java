@@ -130,21 +130,22 @@ public class Main {
     public int valueWin = 0;
 
     // FALAS - USER
-    public final String ASK_NAME = "insira seu nome:";
+    public final String ASK_NAME = "Insira seu nome:";
+    public final String NAME_CONFIRMATION = "Você tem certeza que o nome está correto? Ele será utilizado no seu certificado posteriormente!!\n(digite 'Sim' para confirmar).";
     public final String THANKS_FOR_PLAYING = "Obrigado por jogar!";
     public final String NO_NAME = "";
     // FALAS - POKEMONS
     public final String INTRODUCTION = "Bem vindx ao POKE-MATICA!!";
-    public final String CHOOSE_POKEMON = "escolha um pet(escreva o nome do pet):";
-    public final String POKEMON_NOT_AVAILABLE = "não temos esse pet escolha um entre as opções...";
-    public final String POKEMON_CHALLENGE_CALL = "opa antes de de escolher %p, você precisa passar por um desafio!";
+    public final String CHOOSE_POKEMON = "Escolha um pet(escreva o nome do pet):";
+    public final String POKEMON_NOT_AVAILABLE = "Não temos esse pet escolha um entre as opções...";
     public final String NO_POKEMON = "";
     // FALAS - STORY
-    public final String STORY_01 = "Em uma aldeia onde %s mora a matemática é usada para todas as coisas.";
-    public final String STORY_02 = "Existe um grande campeonato de batalhas de matemática onde cada participantes leva um pet para a batalha ... ";
-    public final String STORY_03 = "Ao acertar o resultado da conta o seu pet pode atacar o pet do adversário Esse campeonato envolve 5 Mestres da aldeia muito bons em matemática...";
-    public final String STORY_04 = "Os participantes tem que vencer cada um deles para avançar e enfrentar o melhor dos melhores Sabendo disso %s da escola local que se considera muito bom em matemática decidiu participar.";
-    public final String STORY_05 = "Ao chegar no ultimo ano da escola %s terá que escolher um pet entre 3 para começar sua aventura.";
+    public final String STORY_01 = "Na aldeia de Kaua, a matemática é usada para todas as coisas."
+            + "Existe um grande campeonato de batalhas de matemática, onde cada participante leva um pet para a batalha, ao acertar o resultado da equação seu pet vence a rodada. Esse campeonato envolve 4 grandes mestres da aldeia."
+            + "Os participantes têm que vencer cada um deles para avançar e enfrentar o melhor dos melhores. Sabendo disso, Kaua da escola local decide participar."
+            + "Ao chegar no último ano da escola, Kaua terá que escolher um pet entre 3 para começar sua aventura.";
+    public final String GYM_ASK = "Selecione o ginásio que quer enfrentar!";
+    public final String WRONG_OPTION_MESSAGE = "Resposta errada, volte ao começo e tente novamente.";
     // FALAS - ERROR
     public final String ERROR_OPTION_NOT_AVAILABLE = "Escolha uma das opções válidas!";
     public final String ERROR_DEFAULT_MESSAGE = "Houve um erro, comunique nossa equipe ou tente novamente mais tarde. Obrigado!";
@@ -163,8 +164,8 @@ public class Main {
     public final String CERTIFICATE_NAME = "certificate.pdf";
     public final String CERTIFICATE_ABSOLUTE_PATH = System.getProperty("user.home") + "/Desktop/" + CERTIFICATE_NAME;
     public final String IMAGE_PATH = "images/img.png";
-    public final String CERTIFICATE_TEXT_TITLE = "Certificado poke-matica";
-    public final String CERTIFICATE_TEXT_PARAGRAPH = "Certificamos (não oficialmente) que %s concluiu o curso POKE-MATICA GINASIO DAS FUNCOES com sucesso no dia %d às %h";
+    public final String CERTIFICATE_TEXT_TITLE = "Certificado Poke-Matica";
+    public final String CERTIFICATE_TEXT_PARAGRAPH = "Certificamos (não oficialmente) que %s concluiu o curso POKE-MATICA GINÁSIO DAS FUNCOES com sucesso no dia %d às %h";
     public final String CERTIFICATE_JWT_TEXT = "Token do certificado";
 
     public final Font TITLE_FONT = new Font(FontFamily.TIMES_ROMAN, 24, Font.BOLD);
@@ -235,7 +236,7 @@ public class Main {
             print(ASK_NAME);
             userName = input.nextLine();
 
-            print("Você tem certeza que o nome está correto? Ele será utilizado no seu certificado posteriormente!!\n(digite 'Sim' para confirmar).");
+            print(NAME_CONFIRMATION);
 
             String yes = "sim";
 
@@ -249,9 +250,7 @@ public class Main {
         }
         clearScreen();
         divider();
-        String inlineStory = STORY_01 + "\n" + STORY_02 + "\n" + STORY_03 + "\n" +
-                STORY_04 + "\n" + STORY_05;
-        print(inlineStory.replaceAll("%s", userName));
+        print(STORY_01.replaceAll("%s", userName));
         divider();
 
         if (pokemon == NO_POKEMON) {
@@ -274,7 +273,7 @@ public class Main {
 
     public void handleBattle() {
         int optionGym;
-        print("Selecione o ginásio que quer enfrentar!");
+        print(GYM_ASK);
         divider();
         for (int i = 0; i < GYM_NAME.length; i++) {
             print((i + 1) + ")" + GYM_NAME[i]);
@@ -300,11 +299,10 @@ public class Main {
                         gymEasy();
                         valueWin = 2;
                         break;
-                    } 
-                        print("esse ginasio ainda não foi desbloqueado");
-                        handleBattle();
-                        
-                    
+                    }
+                    print("Este ginásio ainda não foi desbloqueado...");
+                    handleBattle();
+
                     break;
 
                 case 3:
@@ -312,7 +310,7 @@ public class Main {
                         gymMedium();
                         valueWin = 3;
                     } else {
-                        print("esse ginasio ainda não foi desbloqueado");
+                        print("Este ginásio ainda não foi desbloqueado...");
                         handleBattle();
                     }
 
@@ -322,7 +320,7 @@ public class Main {
                         gymHard();
                         valueWin = 4;
                     } else {
-                        print("esse ginasio ainda não foi desbloqueado");
+                        print("Este ginásio ainda não foi desbloqueado...");
                         handleBattle();
                     }
 
@@ -330,16 +328,17 @@ public class Main {
                 case 5:
                     if (valueWin == 3) {
                         print(
-                                "Parabens por ter vencido os 5 ginasios e ter se tornando um mestre Pokematica");
+                                "Parabéns por ter vencer os 5 ginásios e ter se tornando um mestre Poke-Matica!");
                         valueWin = 5;
                         handleCertificateCreator();
-                    } else {print("esse ginasio ainda não foi desbloqueado");
+                    } else {
+                        print("Este ginásio ainda não foi desbloqueado...");
                         handleBattle();
                     }
 
                     break;
                 default:
-                    print("opção invalida selecione novamente ");
+                    print("Opção inválida, tente novamente.");
                     optionDefault = 1;
                     break;
             }
@@ -347,105 +346,92 @@ public class Main {
     }
 
     public void gymVeryEasy() {
+        String leaderName = "Mestre Executor de Raízes";
         print(
-                "Seja BEM VINDO ao " + GYM_NAME[0]
-                        + " eu sou o lider desse ginasio, ganhe de mim em uma batalha matematica \n e receba Insígnia\n");
-        divider();
-
-        print(
-                "seja bem vindo " + userName
-                        + " a sua primeira batalha de matematica pokemon, seu primeiro adiversario sera o mestre executor de raizes vamos nessa \n ");
+                "Seja BEM VINDX ao " + GYM_NAME[0]
+                        + "! Eu sou o " + leaderName
+                        + ", lider deste ginásio. Ganhe de mim em uma batalha Poke-Mática e receba sua insígnia\n");
 
         print(
-                "executor de raizes: \n óla menine, então é você que todo mundo esta falando na aldeia que esta com coragem o suficiente para desafiar os grandas mestres da matematica da cidade ? \n ");
+                leaderName
+                        + ": Então, é sobre você que estão falando na aldeia? Acha mesmo que tem a coragem para desafiar grandes Mestres Poke-Mática?\n");
 
-        print(userName + " : \n Sim prazer me chamo " + userName + " e vim para derotar todos vocês \n ");
+        print(userName + ": Sim! Prazer, me chamo " + userName + ", e vim derotar vocês!\n");
 
-        print(
-                "executor de raizes: \n então vamos logo para sua primeira batalha ja que esta tão confiante assim, esses sao os meus pokemons!! \n");
+        print(leaderName +
+                ": Então vamos logo para sua primeira batalha, já que está tão confiante assim, estes são os meus pokémons!!\n");
 
-        print(" pokemons do mestre : \n \n Multiplicador de socos \n divisor de chamas \n soma solar ");
+        print("\n\n     Multiplicador de Socos\n    Divisor de Chamas\n     Soma Solar\n");
 
         questionPG();
 
-        print("parabens voce venceu a sua primeira batalha esta pronto para proxima ? \n ");
+        print("Parabéns, " + userName
+                + " você venceu sua primeira batalha. Garantirei que não será assim nas próximas...\n");
 
         divider();
     }
 
     public void gymEasy() {
+        String leaderName = "Sensei Matemático";
         print(
-                "Seja BEM VINDO ao " + GYM_NAME[1]
-                        + " você chegou ao segundo ginasio, ganhe a batalha matematica \n e receba uma Insígnia\n");
+                "Seja BEM VINDX ao " + GYM_NAME[1]
+                        + "! Você chegou ao segundo ginasio, ganhe a batalha matemática e receba uma insígnia\n");
         divider();
 
-        print("Segundo mestre :\n nossa estão todos comentado sobre você depois que derotou o mestre do Ginasio nutella x Raizes \n ");
+        print(leaderName + ": Todos estão comentado sobre você, agora que derotou o mestre do ginásio " + GYM_NAME[0]
+                + " \n ");
 
         print(userName
-                + " : \n fiquei sabendo dos comentarios da aldeia sobre mim, mas não acho que seja pra tanto o primeiro mestre foi muito facil de passar! \n ");
+                + " : Fiquei sabendo dos comentários, mas não acho que seja para tanto. O primeiro mestre foi muito facil de passar!\n");
 
-        print("segundo mestre : \n oloko então você se acha muito bom né, me chamo sensei matematico e vou te encinar uma licão por falar que foi facil vencer meu amigo \n ");
+        print(leaderName + ": Oloco, então você se acha muito mesmo bom né? Sendo assim, vamos batalhar.\n ");
 
-        print(userName
-                + " : \n pode vir então , vamos lá e ve se não facilita pra mim quero perguntas mais dificeis \n ");
-
-        print("Sensei Matematico : \n então vamos nessa que eu vou acabar com a sua marra \n ");
-
-        print("pokemons do Sensei : \n subtramon \n elektro bhaskara ");
+        print("\n       Subtramon\n     Elektro Bhaskara ");
 
         questionPA();
 
-        print("muito bem a partir de agora as coisas vao ficar mais dificeis a cada vitoria, entao ja se prepara e vamos nessa \n ");
+        print("...\nMuito bem, a partir de agora as coisas vão ficar ainda mais dificeis a cada vitória.\n");
 
         divider();
     }
 
     public void gymMedium() {
+        String leaderName = "Mestre dos Números";
         print(
-                "Seja BEM VINDO ao " + GYM_NAME[2]
-                        + " você chegou ao terceiro ginasio, ganhe a batalha matematica \n e receba uma Insígnia\n");
+                "Seja BEM VINDX ao " + GYM_NAME[2]
+                        + "! Você chegou ao terceiro ginásio, ganhe a batalha matemática e receba uma insígnia\n");
         divider();
 
-        print("terceiro mestre : \n " + userName
-                + " né ja estou sabendo que você é o menine cheio de marra que esta derrotando os metres da aldeia \n ");
+        print(leaderName + ": " + userName
+                + " né? Fiquei sabendo que você já derrotou dois metres Poke-Mática da aldeia...\n");
 
-        print(userName
-                + "  : \n sò porque sou mais superior que os mestres anteriores não significa que sou marrento aiai \n ");
+        print("Me chamo Mestre dos numeros, vamos batalhar.\n");
 
-        print("ja que você chegou ate aki aposto uma vida extra com você que não vai conseguir me derrotar com minhas perguntas, se não eu nao me chamo Mestre dos numeros !! \n ");
-
-        print(userName
-                + " : \n gostei da sua proposta, então ja vai se preparando para trocar o seu nome depois desse desafio hahaha \n ");
-
-        print("mestre dos numeros : \n então vamos nessa só não va chorar ao final da batalha \n ");
-
-        print("pokemons do mestre : \n \n Gyarados romanos \n Potencia hipnotica \n ");
+        print("\n       Gyarados Romanos\n      Potencia Hipnóptica\n");
 
         questionFuncOne();
 
-        print("nossa vc esta indo muito bem ja derrotou 2 grandes mestres da matematica mas agora as coisas vao fifar ainda mais dificeis \n ");
+        print(leaderName
+                + ": Você está indo muito bem, já derrotou 3 grandes mestres Poke-Mática... Acho que não irá além disso.\n");
 
         divider();
     }
 
     public void gymHard() {
+        String leaderName = "";
         print(
-                "Seja BEM VINDO ao " + GYM_NAME[3]
-                        + " agora você chegou ao quarto ginasio, ganhe essa batalha matematica \n e recceba uma Insígnia\n");
+                "Seja BEM VINDX ao " + GYM_NAME[3]
+                        + "! Você chegou ao quarto ginásio, ganhe essa batalha Poke-Mática e receba uma insígnia\n");
         divider();
 
-        print("quarto merestre : \n nossa poucas pessoas chegaram a este nivel você tem um grande potencial de ganhar do grao mestre \n ");
+        print(leaderName
+                + ": Poucas pessoas chegaram a este nivel, nenhuma nunca passou.\nVocê tem um grande potencial, mas sua sorte não será o bastante aqui!\n");
 
-        print(userName
-                + " : \n eu sei disso ele que me aguante primeiro vou derrotar você, então fique focado na nossa batalha e me faça perguntas dificeis dessa vez, pra você nao passar vergonha \n ");
-
-        print("quarto merestre : \n muito ousado você meu jovem eu sou o grande prodigio e vou te encinar uma licão \n ");
-
-        print("os pokemons do mestre prodigio são : \n \n numero fantasma \n rocha binaria \n ");
+        print("\n       Número Fantasma\n       Rocha Binária\n");
 
         questionFuncsecond();
 
-        print("agora você esta na final então se prepara que la vem chumbo grosso você enfrentara o grão mestre e o seu pokemon lendario \n ");
+        print("Agora você está na final, então se prepare, seu próximo adversário será o Grão Mestre, e o seu pet Lendário\n");
 
         divider();
     }
@@ -460,7 +446,7 @@ public class Main {
             result = inputInt();
             divider();
             if (result != 4) {
-                print("resposta errada, volte ao menu e tente novamente");
+                print(WRONG_OPTION_MESSAGE);
                 divider();
                 validate = 1;
                 break;
@@ -472,7 +458,7 @@ public class Main {
             result = inputInt();
             divider();
             if (result != 5) {
-                print("resposta errada, volte ao menu e tente novamente");
+                print(WRONG_OPTION_MESSAGE);
                 validate = 1;
                 divider();
                 break;
@@ -484,7 +470,7 @@ public class Main {
             result = inputInt();
             divider();
             if (result != 2) {
-                print("resposta errada, volte ao menu e tente novamente");
+                print(WRONG_OPTION_MESSAGE);
                 divider();
                 validate = 1;
                 break;
@@ -512,7 +498,7 @@ public class Main {
             result = inputInt();
             divider();
             if (result != 1) {
-                print("resposta errada, volte ao menu e tente novamente");
+                print(WRONG_OPTION_MESSAGE);
                 divider();
                 validate = 1;
                 break;
@@ -528,7 +514,7 @@ public class Main {
             result = inputInt();
             divider();
             if (result != 1) {
-                print("resposta errada, volte ao menu e tente novamente");
+                print(WRONG_OPTION_MESSAGE);
                 divider();
                 validate = 1;
                 break;
@@ -567,7 +553,7 @@ public class Main {
             result = inputInt();
             divider();
             if (result != 4) {
-                print("resposta errada, volte ao menu e tente novamente");
+                print(WRONG_OPTION_MESSAGE);
                 divider();
                 validate = 1;
                 break;
@@ -594,7 +580,7 @@ public class Main {
             result = inputInt();
             divider();
             if (result != 2) {
-                print("resposta errada, volte ao menu e tente novamente");
+                print(WRONG_OPTION_MESSAGE);
                 divider();
                 validate = 1;
                 break;
@@ -609,7 +595,7 @@ public class Main {
             result = inputInt();
             divider();
             if (result != 1) {
-                print("resposta errada, volte ao menu e tente novamente");
+                print(WRONG_OPTION_MESSAGE);
                 divider();
                 validate = 1;
                 break;
@@ -1266,7 +1252,7 @@ public class Main {
             closeDocument();
 
             print(
-                    "Certificado Emitido com sucesso!\n" + CERTIFICATE_ABSOLUTE_PATH + CERTIFICATE_NAME + "\n");
+                    "Certificado Emitido com sucesso!\n" + CERTIFICATE_ABSOLUTE_PATH + "\n");
         } catch (Exception e) {
             handleError(e);
         }
