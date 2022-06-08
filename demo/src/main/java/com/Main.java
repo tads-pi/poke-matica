@@ -1094,10 +1094,11 @@ public class Main {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             org.w3c.dom.Document doc = builder.parse(XML_SAVE_FILE_NAME);
-
-            addUser(doc);
-            // loadSaves();
-
+            if (userUUID == "") {
+                addUser(doc);
+            } else {
+                updateUser(doc);
+            }
         } catch (Exception e) {
             handleError(e);
         }
@@ -1149,6 +1150,58 @@ public class Main {
 
         xmlWriter(XML_SAVE_FILE_NAME, xmlDoc);
         System.out.println("Usuário " + this.userName + " adicionado!");
+    }
+
+    public void updateUser(org.w3c.dom.Document xmlDoc) throws Exception {
+        NodeList user_list = xmlDoc.getElementsByTagName(XML_SAVE_MAIN_ELEMENT);
+        String uuid = "";
+
+        if (user_list.getLength() > 0) {
+            for (int i = 0; i < user_list.getLength(); i++) {
+                Node item = user_list.item(i);
+                if (item.getNodeType() == Node.ELEMENT_NODE) {
+                    org.w3c.dom.Element element = (org.w3c.dom.Element) item;
+                    NodeList data = element.getChildNodes();
+                    for (int j = 0; j < data.getLength(); j++) {
+                        Node valueWrapper = data.item(j);
+                        if (valueWrapper.getNodeType() == Node.ELEMENT_NODE) {
+                            org.w3c.dom.Element value = (org.w3c.dom.Element) valueWrapper;
+
+                            if (value.getNodeName() == "uuid") {
+                                String str = value.getTextContent().replace("\n", "");
+                                uuid = str;
+                            }
+
+                            if (uuid.equals(this.userUUID)) {
+                                switch (value.getNodeName()) {
+                                    case "backpack":
+                                        NodeList list = value.getChildNodes();
+                                        for (int k = 0; k < list.getLength(); k++) {
+                                            Node e = list.item(k);
+                                            if (e.getNodeType() == Node.ELEMENT_NODE) {
+                                                org.w3c.dom.Element v = (org.w3c.dom.Element) e;
+                                                int badges = 0;
+                                                switch (v.getNodeName()) {
+                                                    case "pokemon":
+                                                        v.setTextContent(this.pokemon);
+                                                        break;
+                                                    case "badge":
+                                                        v.setTextContent(this.badge[badges]);
+                                                        badges++;
+                                                        break;
+                                                }
+                                            }
+                                        }
+                                }
+                                xmlWriter(XML_SAVE_FILE_NAME, xmlDoc);
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     //
