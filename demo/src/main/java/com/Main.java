@@ -1072,8 +1072,58 @@ public class Main {
                     divider();
                 }
             }
-            // Node user = user_list.item(askSave() - 1);
-            System.out.println("selected save: " + askSave());
+            int save = askSave() - 1;
+            if (save == -1) {
+                return;
+            }
+            Node user = user_list.item(save);
+
+            if (user.getNodeType() == Node.ELEMENT_NODE) {
+                org.w3c.dom.Element element = (org.w3c.dom.Element) user;
+                NodeList data = element.getChildNodes();
+
+                for (int j = 0; j < data.getLength(); j++) {
+                    Node valueWrapper = data.item(j);
+                    if (valueWrapper.getNodeType() == Node.ELEMENT_NODE) {
+                        org.w3c.dom.Element value = (org.w3c.dom.Element) valueWrapper;
+
+                        String str = value.getTextContent().replace("\n", "");
+
+                        switch (value.getNodeName()) {
+                            case "name":
+                                this.userName = str;
+                                break;
+                            case "uuid":
+                                this.userUUID = str;
+                                break;
+                            case "backpack":
+                                NodeList list = value.getChildNodes();
+                                for (int k = 0; k < list.getLength(); k++) {
+                                    Node e = list.item(k);
+                                    if (e.getNodeType() == Node.ELEMENT_NODE) {
+                                        org.w3c.dom.Element v = (org.w3c.dom.Element) e;
+                                        int badges = 0;
+                                        switch (v.getNodeName()) {
+                                            case "pokemon":
+                                                this.pokemon = v.getTextContent();
+                                                break;
+                                            case "badge":
+                                                this.badge[badges] = v.getTextContent();
+                                                badges++;
+                                                break;
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+                divider();
+            }
+            System.out.println(userName);
+            System.out.println(userUUID);
+            System.out.println(pokemon);
+            System.out.println(badge[0] + ", " + badge[1] + ", " + badge[2] + ", " + badge[3] + ", " + badge[4]);
             divider();
         }
 
