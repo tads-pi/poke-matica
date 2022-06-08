@@ -194,11 +194,29 @@ public class Main {
     public final String XML_SAVE_MAIN_ELEMENT_BACKPACK = "backpack";
     public final String XML_SAVE_MAIN_ELEMENT_BACKPACK_POKEMON = "pokemon";
     public final String XML_SAVE_MAIN_ELEMENT_BACKPACK_BADGE = "badge";
-    public DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+    public org.w3c.dom.Document xmlDocBackup;
+
+    public static final int MAKE_BACKUP = 100;
+    public static final int GET_BACKUP = 101;
+
+    public void xmlBackup(int type) throws Exception {
+        DocumentBuilderFactory factoryBackup = DocumentBuilderFactory.newInstance();
+        DocumentBuilder backupbuilder = factoryBackup.newDocumentBuilder();
+        switch (type) {
+            case MAKE_BACKUP:
+                this.xmlDocBackup = backupbuilder.parse(XML_SAVE_FILE_NAME);
+                break;
+            case GET_BACKUP:
+                xmlWriter(XML_SAVE_FILE_NAME, this.xmlDocBackup);
+                break;
+        }
+    }
 
     // GAME
     public void preStartGame() {
         try {
+            xmlBackup(MAKE_BACKUP);
             loadSaves();
             startGame();
         } catch (Exception e) {
@@ -697,8 +715,13 @@ public class Main {
         } catch (NumberFormatException nfe) {
             System.out.println(ERROR_NUMBER_FORMAT_EXCEPTION);
         } catch (Exception e1) {
+            try {
+                xmlBackup(GET_BACKUP);
+            } catch (Exception e2) {
+                System.out.println(ERROR_DEFAULT_MESSAGE);
+            }
             System.out.println(ERROR_DEFAULT_MESSAGE);
-            System.out.println("Erro: " + e);
+            // System.out.println("Erro: " + e);
         }
     }
 
@@ -959,6 +982,8 @@ public class Main {
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty(OutputKeys.CDATA_SECTION_ELEMENTS, "yes");
         transformer.transform(domSource, result);
+
+        xmlBackup(MAKE_BACKUP);
     }
 
     public void train(int TYPE) throws Exception {
