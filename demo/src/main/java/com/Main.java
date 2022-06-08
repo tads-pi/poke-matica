@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,10 +15,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.crypto.SecretKey;
-import javax.management.openmbean.OpenType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -107,9 +104,7 @@ public class Main {
     public String userUUID = "";
     public String userName = "";
     public String pokemon = "";
-    public String[] badge = new String[] {
-            ""
-    };
+    public String[] badge = new String[5];
     // POKEMONS DATA
     public static final String[] STARTER_AVAILABLE_POKEMONS = new String[] {
             "Bulbassauro",
@@ -199,11 +194,29 @@ public class Main {
     public final String XML_SAVE_MAIN_ELEMENT_BACKPACK = "backpack";
     public final String XML_SAVE_MAIN_ELEMENT_BACKPACK_POKEMON = "pokemon";
     public final String XML_SAVE_MAIN_ELEMENT_BACKPACK_BADGE = "badge";
-    public DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+    public org.w3c.dom.Document xmlDocBackup;
+
+    public static final int MAKE_BACKUP = 100;
+    public static final int GET_BACKUP = 101;
+
+    public void xmlBackup(int type) throws Exception {
+        DocumentBuilderFactory factoryBackup = DocumentBuilderFactory.newInstance();
+        DocumentBuilder backupbuilder = factoryBackup.newDocumentBuilder();
+        switch (type) {
+            case MAKE_BACKUP:
+                this.xmlDocBackup = backupbuilder.parse(XML_SAVE_FILE_NAME);
+                break;
+            case GET_BACKUP:
+                xmlWriter(XML_SAVE_FILE_NAME, this.xmlDocBackup);
+                break;
+        }
+    }
 
     // GAME
     public void preStartGame() {
         try {
+            xmlBackup(MAKE_BACKUP);
             loadSaves();
             startGame();
         } catch (Exception e) {
@@ -222,20 +235,20 @@ public class Main {
             print(ASK_NAME);
             userName = input.nextLine();
 
-            print("você tem certeza que o nome esta correto ? (sim para confirmar n para não) ");
+            print("Você tem certeza que o nome está correto? Ele será utilizado no seu certificado posteriormente!!\n(digite 'Sim' para confirmar).");
 
             String yes = "sim";
 
             String validacao = input.nextLine();
 
-            if (validacao.equalsIgnoreCase(yes)) {
-
-            } else {
+            if (!validacao.equalsIgnoreCase(yes)) {
                 print(ASK_NAME);
                 userName = input.nextLine();
             }
 
         }
+        clearScreen();
+        divider();
         String inlineStory = STORY_01 + "\n" + STORY_02 + "\n" + STORY_03 + "\n" +
                 STORY_04 + "\n" + STORY_05;
         print(inlineStory.replaceAll("%s", userName));
@@ -702,8 +715,13 @@ public class Main {
         } catch (NumberFormatException nfe) {
             System.out.println(ERROR_NUMBER_FORMAT_EXCEPTION);
         } catch (Exception e1) {
+            try {
+                xmlBackup(GET_BACKUP);
+            } catch (Exception e2) {
+                System.out.println(ERROR_DEFAULT_MESSAGE);
+            }
             System.out.println(ERROR_DEFAULT_MESSAGE);
-            System.out.println("Erro: " + e);
+            // System.out.println("Erro: " + e);
         }
     }
 
@@ -791,12 +809,10 @@ public class Main {
         return pokemon;
     }
 
-    public static int inputInt() {
+    public int inputInt() {
         int i;
-        Scanner input = new Scanner(System.in);
         i = input.nextInt();
         return i;
-
     }
 
     // Ask user what they want to do
@@ -958,12 +974,16 @@ public class Main {
         File file = new File(fileName);
         Result result = new StreamResult(file);
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        // Transformer transformer = transformerFactory.newTransformer(new
+        // StreamSource("strip-space.xsl"));
         Transformer transformer = transformerFactory.newTransformer();
 
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty(OutputKeys.CDATA_SECTION_ELEMENTS, "yes");
         transformer.transform(domSource, result);
+
+        xmlBackup(MAKE_BACKUP);
     }
 
     public void train(int TYPE) throws Exception {
@@ -1052,8 +1072,58 @@ public class Main {
                     divider();
                 }
             }
-            // Node user = user_list.item(askSave() - 1);
-            System.out.println("selected save: " + askSave());
+            int save = askSave() - 1;
+            if (save == -1) {
+                return;
+            }
+            Node user = user_list.item(save);
+
+            if (user.getNodeType() == Node.ELEMENT_NODE) {
+                org.w3c.dom.Element element = (org.w3c.dom.Element) user;
+                NodeList data = element.getChildNodes();
+
+                for (int j = 0; j < data.getLength(); j++) {
+                    Node valueWrapper = data.item(j);
+                    if (valueWrapper.getNodeType() == Node.ELEMENT_NODE) {
+                        org.w3c.dom.Element value = (org.w3c.dom.Element) valueWrapper;
+
+                        String str = value.getTextContent().replace("\n", "");
+
+                        switch (value.getNodeName()) {
+                            case "name":
+                                this.userName = str;
+                                break;
+                            case "uuid":
+                                this.userUUID = str;
+                                break;
+                            case "backpack":
+                                NodeList list = value.getChildNodes();
+                                for (int k = 0; k < list.getLength(); k++) {
+                                    Node e = list.item(k);
+                                    if (e.getNodeType() == Node.ELEMENT_NODE) {
+                                        org.w3c.dom.Element v = (org.w3c.dom.Element) e;
+                                        int badges = 0;
+                                        switch (v.getNodeName()) {
+                                            case "pokemon":
+                                                this.pokemon = v.getTextContent();
+                                                break;
+                                            case "badge":
+                                                this.badge[badges] = v.getTextContent();
+                                                badges++;
+                                                break;
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+                divider();
+            }
+            System.out.println(userName);
+            System.out.println(userUUID);
+            System.out.println(pokemon);
+            System.out.println(badge[0] + ", " + badge[1] + ", " + badge[2] + ", " + badge[3] + ", " + badge[4]);
             divider();
         }
 
@@ -1061,7 +1131,7 @@ public class Main {
 
     public int askSave() {
         try {
-            speedPrint("Escolha o seu save.");
+            speedPrint("Escolha o seu save, ou digite '0' para criar um save novo!");
             int save = Integer.parseInt(input.nextLine().charAt(0) + "");
             return save;
         } catch (Exception e) {
@@ -1071,16 +1141,14 @@ public class Main {
 
     public void saveGame() {
         try {
-
-            // String userUUID = getUser()
-
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             org.w3c.dom.Document doc = builder.parse(XML_SAVE_FILE_NAME);
-
-            addUser(doc);
-            // loadSaves();
-
+            if (userUUID == "") {
+                addUser(doc);
+            } else {
+                updateUser(doc);
+            }
         } catch (Exception e) {
             handleError(e);
         }
@@ -1118,8 +1186,8 @@ public class Main {
         userBackpack.appendChild(backpackBadge);
 
         // Appending
-        user.appendChild(userName);
         user.appendChild(userUUID);
+        user.appendChild(userName);
         user.appendChild(userBackpack);
 
         SimpleDateFormat CERTIFICATE_DATE_FORMAT = new SimpleDateFormat("dd/mm/yyyy");
@@ -1132,6 +1200,58 @@ public class Main {
 
         xmlWriter(XML_SAVE_FILE_NAME, xmlDoc);
         System.out.println("Usuário " + this.userName + " adicionado!");
+    }
+
+    public void updateUser(org.w3c.dom.Document xmlDoc) throws Exception {
+        NodeList user_list = xmlDoc.getElementsByTagName(XML_SAVE_MAIN_ELEMENT);
+        String uuid = "";
+
+        if (user_list.getLength() > 0) {
+            for (int i = 0; i < user_list.getLength(); i++) {
+                Node item = user_list.item(i);
+                if (item.getNodeType() == Node.ELEMENT_NODE) {
+                    org.w3c.dom.Element element = (org.w3c.dom.Element) item;
+                    NodeList data = element.getChildNodes();
+                    for (int j = 0; j < data.getLength(); j++) {
+                        Node valueWrapper = data.item(j);
+                        if (valueWrapper.getNodeType() == Node.ELEMENT_NODE) {
+                            org.w3c.dom.Element value = (org.w3c.dom.Element) valueWrapper;
+
+                            if (value.getNodeName() == "uuid") {
+                                String str = value.getTextContent().replace("\n", "");
+                                uuid = str;
+                            }
+
+                            if (uuid.equals(this.userUUID)) {
+                                switch (value.getNodeName()) {
+                                    case "backpack":
+                                        NodeList list = value.getChildNodes();
+                                        for (int k = 0; k < list.getLength(); k++) {
+                                            Node e = list.item(k);
+                                            if (e.getNodeType() == Node.ELEMENT_NODE) {
+                                                org.w3c.dom.Element v = (org.w3c.dom.Element) e;
+                                                int badges = 0;
+                                                switch (v.getNodeName()) {
+                                                    case "pokemon":
+                                                        v.setTextContent(this.pokemon);
+                                                        break;
+                                                    case "badge":
+                                                        v.setTextContent(this.badge[badges]);
+                                                        badges++;
+                                                        break;
+                                                }
+                                            }
+                                        }
+                                }
+                                xmlWriter(XML_SAVE_FILE_NAME, xmlDoc);
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     //
