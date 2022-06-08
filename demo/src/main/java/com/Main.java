@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,10 +15,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.crypto.SecretKey;
-import javax.management.openmbean.OpenType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -107,9 +104,7 @@ public class Main {
     public String userUUID = "";
     public String userName = "";
     public String pokemon = "";
-    public String[] badge = new String[] {
-            ""
-    };
+    public String[] badge = new String[5];
     // POKEMONS DATA
     public static final String[] STARTER_AVAILABLE_POKEMONS = new String[] {
             "Bulbassauro",
@@ -222,20 +217,20 @@ public class Main {
             print(ASK_NAME);
             userName = input.nextLine();
 
-            print("você tem certeza que o nome esta correto ? (sim para confirmar n para não) ");
+            print("Você tem certeza que o nome está correto? Ele será utilizado no seu certificado posteriormente!!\n(digite 'Sim' para confirmar).");
 
             String yes = "sim";
 
             String validacao = input.nextLine();
 
-            if (validacao.equalsIgnoreCase(yes)) {
-
-            } else {
+            if (!validacao.equalsIgnoreCase(yes)) {
                 print(ASK_NAME);
                 userName = input.nextLine();
             }
 
         }
+        clearScreen();
+        divider();
         String inlineStory = STORY_01 + "\n" + STORY_02 + "\n" + STORY_03 + "\n" +
                 STORY_04 + "\n" + STORY_05;
         print(inlineStory.replaceAll("%s", userName));
@@ -791,12 +786,10 @@ public class Main {
         return pokemon;
     }
 
-    public static int inputInt() {
+    public int inputInt() {
         int i;
-        Scanner input = new Scanner(System.in);
         i = input.nextInt();
         return i;
-
     }
 
     // Ask user what they want to do
@@ -958,6 +951,8 @@ public class Main {
         File file = new File(fileName);
         Result result = new StreamResult(file);
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        // Transformer transformer = transformerFactory.newTransformer(new
+        // StreamSource("strip-space.xsl"));
         Transformer transformer = transformerFactory.newTransformer();
 
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
@@ -1061,7 +1056,7 @@ public class Main {
 
     public int askSave() {
         try {
-            speedPrint("Escolha o seu save.");
+            speedPrint("Escolha o seu save, ou digite '0' para criar um save novo!");
             int save = Integer.parseInt(input.nextLine().charAt(0) + "");
             return save;
         } catch (Exception e) {
@@ -1071,9 +1066,6 @@ public class Main {
 
     public void saveGame() {
         try {
-
-            // String userUUID = getUser()
-
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             org.w3c.dom.Document doc = builder.parse(XML_SAVE_FILE_NAME);
@@ -1118,8 +1110,8 @@ public class Main {
         userBackpack.appendChild(backpackBadge);
 
         // Appending
-        user.appendChild(userName);
         user.appendChild(userUUID);
+        user.appendChild(userName);
         user.appendChild(userBackpack);
 
         SimpleDateFormat CERTIFICATE_DATE_FORMAT = new SimpleDateFormat("dd/mm/yyyy");
