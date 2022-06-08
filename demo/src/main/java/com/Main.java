@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -437,50 +438,95 @@ public class Main {
     }
 
     public void questionPG() {
-        int validate = 0, result = 0;
+        int validate = 0;
+        ArrayList<Integer> prohibited = new ArrayList<Integer>();
+        int randomNumber;
         do {
-            // question 1
-            print("Qual é o proximo termo da Progressão geométrica:\n 3,6,12,...");
-            divider();
-            print("1)25\n2)12\n3)34\n4)24\n5)254");
-            result = inputInt();
-            divider();
-            if (result != 4) {
-                print(WRONG_OPTION_MESSAGE);
-                divider();
-                validate = 1;
-                break;
+            if (prohibited.size() != 3) {
+                randomNumber = sortInt(0, 3, prohibited);
+                prohibited.add(randomNumber);
+
+                switch (randomNumber) {
+                    case 0:
+                        validate = questionPG_1();
+                        break;
+                    case 1:
+                        validate = questionPG_2();
+                        break;
+                    case 2:
+                        validate = questionPG_3();
+                        break;
+                }
+            } else {
+                validate = 2;
             }
-            // question 2
-            print("Qual é o proximo termo da Progressão geométrica:\n 192,48,12,...");
-            divider();
-            print("1)5\n2)122\n3)4\n4)14\n5)3");
-            result = inputInt();
-            divider();
-            if (result != 5) {
-                print(WRONG_OPTION_MESSAGE);
-                validate = 1;
-                divider();
-                break;
-            }
-            // question 3
-            print("Qual é o 5º termo na Progressão:\n b(n)=-1()2^(n-1)");
-            divider();
-            print("1)-15\n2)-16\n3)15\n4)24\n5)-254");
-            result = inputInt();
-            divider();
-            if (result != 2) {
-                print(WRONG_OPTION_MESSAGE);
-                divider();
-                validate = 1;
-                break;
-            }
-            validate = 2;
 
         } while (!(validate == 1 || validate == 2));
         if (validate == 1) {
             handleOptions(OPTIONS_PLAY);
 
+        }
+    }
+
+    public int sortInt(int min, int max, ArrayList<Integer> prohibited) {
+        int r = (int) ((Math.random() * (max - min)) + min);
+        for (int i : prohibited) {
+            if (r == i) {
+                r = sortInt(min, max, prohibited);
+            }
+        }
+        return r;
+    }
+
+    public int questionPG_1() {
+        int result;
+        // question 1
+        print("Qual é o proximo termo da Progressão geométrica:\n 3,6,12,...");
+        divider();
+        print("1)25\n2)12\n3)34\n4)24\n5)254");
+        result = inputInt();
+        divider();
+
+        if (result != 4) {
+            print(WRONG_OPTION_MESSAGE);
+            divider();
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public int questionPG_2() {
+        int result;
+        // question 2
+        print("Qual é o proximo termo da Progressão geométrica:\n 192,48,12,...");
+        divider();
+        print("1)5\n2)122\n3)4\n4)14\n5)3");
+        result = inputInt();
+        divider();
+        if (result != 5) {
+            print(WRONG_OPTION_MESSAGE);
+            divider();
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public int questionPG_3() {
+        int result;
+        // question 3
+        print("Qual é o 5º termo na Progressão:\n b(n)=-1()2^(n-1)");
+        divider();
+        print("1)-15\n2)-16\n3)15\n4)24\n5)-254");
+        result = inputInt();
+        divider();
+        if (result != 2) {
+            print(WRONG_OPTION_MESSAGE);
+            divider();
+            return 1;
+        } else {
+            return 0;
         }
     }
 
