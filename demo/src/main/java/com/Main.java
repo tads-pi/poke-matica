@@ -140,10 +140,10 @@ public class Main {
     public final String POKEMON_NOT_AVAILABLE = "Não temos esse pet escolha um entre as opções...";
     public final String NO_POKEMON = "";
     // FALAS - STORY
-    public final String STORY_01 = "Na aldeia de Kaua, a matemática é usada para todas as coisas."
+    public final String STORY_01 = "Na aldeia de %s, a matemática é usada para todas as coisas."
             + "Existe um grande campeonato de batalhas de matemática, onde cada participante leva um pet para a batalha, ao acertar o resultado da equação seu pet vence a rodada. Esse campeonato envolve 4 grandes mestres da aldeia."
-            + "Os participantes têm que vencer cada um deles para avançar e enfrentar o melhor dos melhores. Sabendo disso, Kaua da escola local decide participar."
-            + "Ao chegar no último ano da escola, Kaua terá que escolher um pet entre 3 para começar sua aventura.";
+            + "Os participantes têm que vencer cada um deles para avançar e enfrentar o melhor dos melhores. Sabendo disso, %s da escola local decide participar."
+            + "Ao chegar no último ano da escola, %s terá que escolher um pet entre 3 para começar sua aventura.";
     public final String GYM_ASK = "Selecione o ginásio que quer enfrentar!";
     public final String WRONG_OPTION_MESSAGE = "Resposta errada, volte ao começo e tente novamente.";
     // FALAS - ERROR
