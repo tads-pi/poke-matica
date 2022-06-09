@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <topics>
-    <topic type="PG" id="12">
-        <slug>Lógica com lego: </slug>
+    <topic type="PA" id="12">
+        <slug>Progressão Aritimética</slug>
+        <url>https://pt.khanacademy.org/math/em-mat-algebra2/x1d9e5bc8bded7b21:progressao-aritimetica-p-a</url>
+    </topic>
+    <topic type="PG" id="13">
+        <slug>Progressão Geométrica: </slug>
         <url>https://pt.khanacademy.org/math/em-mat-algebra2/x1d9e5bc8bded7b21:progressao-geometrica-p-g</url>
     </topic>
     <topic type="FUNCOES-DE-PRIMEIRO-GRAU" id="14">
-        <slug>Lógica com lego: </slug>
+        <slug>Função de Primeiro Grau: </slug>
         <url>https://pt.khanacademy.org/math/em-mat-algebra/x34e9dd8107ca5eda:funcao</url>
     </topic>
     <topic type="FUNCOES-DE-SEGUNDO-GRAU" id="15">
-        <slug>Lógica com lego: </slug>
+        <slug>Função de Segundo Grau: </slug>
         <url>https://pt.khanacademy.org/math/algebra-home/alg-quadratics/factored-form-alg/v/zero-product-property</url>
     </topic>
     <topic type="FUNCOES-EXPONENCIAIS" id="16">
-        <slug>Lógica com lego: </slug>
+        <slug>Funções Exponenciais: </slug>
         <url>https://pt.khanacademy.org/math/algebra-home/alg-exp-and-log</url>
     </topic>
 </topics>
