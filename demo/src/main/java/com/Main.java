@@ -1331,7 +1331,7 @@ public class Main {
         // Text - SKIP LINE
         certificateLineSpace(TITLE_TO_TEXT_LINE_SPACING);
         // Text
-        SimpleDateFormat CERTIFICATE_DATE_FORMAT = new SimpleDateFormat("dd/mm/yyyy");
+        SimpleDateFormat CERTIFICATE_DATE_FORMAT = new SimpleDateFormat("dd/MM/YYYY");
         SimpleDateFormat CERTIFICATE_HOUR_FORMAT = new SimpleDateFormat("HH:mm");
         String dateNow = CERTIFICATE_DATE_FORMAT.format(new Date(System.currentTimeMillis()));
         String hourNow = CERTIFICATE_HOUR_FORMAT.format(new Date(System.currentTimeMillis()));
