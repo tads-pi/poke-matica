@@ -61,7 +61,6 @@ public class Main {
     public static final int OPTION_SAVE = 8;
     public static final int OPTION_PLAY_EXIT = 9;
     public static final int OPTION_VALIDATE_CERTIFICATE = 10;
-
     public static final int OPTION_TRAIN_PA = 12;
     public static final int OPTION_TRAIN_PG = 13;
     public static final int OPTION_TRAIN_FIRST_DEGREE = 14;
@@ -122,12 +121,11 @@ public class Main {
             "ginasio Do Grão Mestre",
     };
     public static final String[] INSIGNIA = new String[] {
-            "",
-            "㊀",
-            "㊁",
-            "㊂",
-            "㊃",
-            "㊈",
+            "+-+",
+            "-+-",
+            "*=*",
+            "/*/",
+            "/(*)/",
     };
     public int valueWin = 0;
 
@@ -439,6 +437,21 @@ public class Main {
         divider();
     }
 
+    public void verygymHard() {
+        String leaderName = "Márcio Welker";
+        print(
+                "Seja BEM VINDX ao " + GYM_NAME[4]
+                        + "!Você chegou ao último ginásio, ganhe essa batalha Poke-Mática e receba o seu certificado de mestre Poke-Mática\n");
+        divider();
+
+        print(leaderName
+                + ": Vamos batalhar.\n");
+
+        questionFuncexp();
+
+        divider();
+    }
+
     public void questionPG() {
         int validate = 0;
         ArrayList<Integer> prohibited = new ArrayList<Integer>();
@@ -687,6 +700,32 @@ public class Main {
             }
         } catch (Exception e) {
             handleError(e);
+        }
+    }
+
+    public void questionFuncexp() {
+        int validate = 0, result = 0;
+        do {
+            // question 1
+            print("\nSimplifique");
+            print("Reescreva a expressão na forma a^n");
+            divider();
+            print("a^-13/a^-6");
+            divider();
+            print("1)a^-15\n2)a^15 \n3)a^-7\n4)a^8 \n5)10");
+            result = inputInt();
+            divider();
+            if (result != 2) {
+                print(WRONG_OPTION_MESSAGE);
+                divider();
+                validate = 1;
+                break;
+            }
+
+        } while (!(validate == 1));
+        if (validate == 1) {
+            handleOptions(OPTIONS_PLAY);
+
         }
     }
 
