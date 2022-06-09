@@ -61,7 +61,6 @@ public class Main {
     public static final int OPTION_SAVE = 8;
     public static final int OPTION_PLAY_EXIT = 9;
     public static final int OPTION_VALIDATE_CERTIFICATE = 10;
-
     public static final int OPTION_TRAIN_PA = 12;
     public static final int OPTION_TRAIN_PG = 13;
     public static final int OPTION_TRAIN_FIRST_DEGREE = 14;
@@ -122,12 +121,11 @@ public class Main {
             "ginasio Do Grão Mestre",
     };
     public static final String[] INSIGNIA = new String[] {
-            "",
-            "㊀",
-            "㊁",
-            "㊂",
-            "㊃",
-            "㊈",
+            "+-+",
+            "-+-",
+            "*=*",
+            "/*/",
+            "/(*)/",
     };
     public int valueWin = 0;
 
@@ -142,13 +140,12 @@ public class Main {
     public final String POKEMON_NOT_AVAILABLE = "Não temos esse pet escolha um entre as opções...";
     public final String NO_POKEMON = "";
     // FALAS - STORY
-    public final String STORY_01 = "Na aldeia de %s, a matemática é usada para todas as coisas."
+    public final String STORY_01 = "Na aldeia de Kaua, a matemática é usada para todas as coisas."
             + "Existe um grande campeonato de batalhas de matemática, onde cada participante leva um pet para a batalha, ao acertar o resultado da equação seu pet vence a rodada. Esse campeonato envolve 4 grandes mestres da aldeia."
-            + "Os participantes têm que vencer cada um deles para avançar e enfrentar o melhor dos melhores. Sabendo disso, %s da escola local decide participar."
-            + "Ao chegar no último ano da escola, %s terá que escolher um pet entre 3 para começar sua aventura.";
+            + "Os participantes têm que vencer cada um deles para avançar e enfrentar o melhor dos melhores. Sabendo disso, Kaua da escola local decide participar."
+            + "Ao chegar no último ano da escola, Kaua terá que escolher um pet entre 3 para começar sua aventura.";
     public final String GYM_ASK = "Selecione o ginásio que quer enfrentar!";
-    public final String WRONG_OPTION_MESSAGE = "Resposta errada, volte ao começo e tente novamente.\n";
-    public final String SUGGEST_VIDEO_MESSAGE = "Talvez essa vídeo aula possa te ajudar: ";
+    public final String WRONG_OPTION_MESSAGE = "Resposta errada, volte ao começo e tente novamente.";
     // FALAS - ERROR
     public final String ERROR_OPTION_NOT_AVAILABLE = "Escolha uma das opções válidas!";
     public final String ERROR_DEFAULT_MESSAGE = "Houve um erro, comunique nossa equipe ou tente novamente mais tarde. Obrigado!";
@@ -439,6 +436,25 @@ public class Main {
         divider();
     }
 
+    public void verygymHard() {
+        String leaderName = "";
+        print(
+                "Seja BEM VINDX ao " + GYM_NAME[4]
+                        + "! Você chegou ao quinto ginásio, ganhe essa batalha Poke-Mática e receba o seu certificado de mestre Pokematika\n");
+        divider();
+
+        print(leaderName
+                + ": Poucas pessoas chegaram a este nivel, nenhuma nunca passou.\nVocê tem um grande potencial, mas sua sorte não será o bastante aqui!\n");
+
+        print("\n       Número Fantasma\n       Rocha Binária\n");
+
+        questionFuncsecond();
+
+        print("Agora você está na final, então se prepare, seu próximo adversário será o Grão Mestre, e o seu pet Lendário\n");
+
+        divider();
+    }
+
     public void questionPG() {
         int validate = 0;
         ArrayList<Integer> prohibited = new ArrayList<Integer>();
@@ -447,20 +463,17 @@ public class Main {
             if (prohibited.size() != 3) {
                 randomNumber = sortInt(0, 3, prohibited);
                 prohibited.add(randomNumber);
-                try {
-                    switch (randomNumber) {
-                        case 0:
-                            validate = questionPG_1();
-                            break;
-                        case 1:
-                            validate = questionPG_2();
-                            break;
-                        case 2:
-                            validate = questionPG_3();
-                            break;
-                    }
-                } catch (Exception e) {
-                    handleError(e);
+
+                switch (randomNumber) {
+                    case 0:
+                        validate = questionPG_1();
+                        break;
+                    case 1:
+                        validate = questionPG_2();
+                        break;
+                    case 2:
+                        validate = questionPG_3();
+                        break;
                 }
             } else {
                 validate = 2;
@@ -483,7 +496,7 @@ public class Main {
         return r;
     }
 
-    public int questionPG_1() throws Exception {
+    public int questionPG_1() {
         int result;
         // question 1
         print("Qual é o proximo termo da Progressão geométrica:\n 3,6,12,...");
@@ -494,8 +507,6 @@ public class Main {
 
         if (result != 4) {
             print(WRONG_OPTION_MESSAGE);
-            print(SUGGEST_VIDEO_MESSAGE);
-            train(OPTION_TRAIN_PG);
             divider();
             return 1;
         } else {
@@ -503,7 +514,7 @@ public class Main {
         }
     }
 
-    public int questionPG_2() throws Exception {
+    public int questionPG_2() {
         int result;
         // question 2
         print("Qual é o proximo termo da Progressão geométrica:\n 192,48,12,...");
@@ -513,8 +524,6 @@ public class Main {
         divider();
         if (result != 5) {
             print(WRONG_OPTION_MESSAGE);
-            print(SUGGEST_VIDEO_MESSAGE);
-            train(OPTION_TRAIN_PG);
             divider();
             return 1;
         } else {
@@ -522,7 +531,7 @@ public class Main {
         }
     }
 
-    public int questionPG_3() throws Exception {
+    public int questionPG_3() {
         int result;
         // question 3
         print("Qual é o 5º termo na Progressão:\n b(n)=-1()2^(n-1)");
@@ -532,8 +541,6 @@ public class Main {
         divider();
         if (result != 2) {
             print(WRONG_OPTION_MESSAGE);
-            print(SUGGEST_VIDEO_MESSAGE);
-            train(OPTION_TRAIN_PG);
             divider();
             return 1;
         } else {
@@ -543,150 +550,152 @@ public class Main {
 
     public void questionPA() {
         int validate = 0, result = 0;
-        try {
-            do {
-                // question 1
-                print("\nComplete a formula recursiva de g(n)");
+        do {
+            // question 1
+            print("\nComplete a formula recursiva de g(n)");
+            divider();
+            print("g(n) = 25-49(n-1)");
+            print("g(1)=????");
+            print("g(n) = g(n-1)+?????");
+            divider();
+            print("1)25 e -49 \n2)23 e -25 \n3)-49 e 25 \n4)32 e -25 \n5)32 e -23");
+            result = inputInt();
+            divider();
+            if (result != 1) {
+                print(WRONG_OPTION_MESSAGE);
                 divider();
-                print("g(n) = 25-49(n-1)");
-                print("g(1)=????");
-                print("g(n) = g(n-1)+?????");
-                divider();
-                print("1)25 e -49 \n2)23 e -25 \n3)-49 e 25 \n4)32 e -25 \n5)32 e -23");
-                result = inputInt();
-                divider();
-                if (result != 1) {
-                    print(WRONG_OPTION_MESSAGE);
-                    print(SUGGEST_VIDEO_MESSAGE);
-                    train(OPTION_TRAIN_PA);
-                    divider();
-                    validate = 1;
-                    break;
-                }
-                // question 2
-                print("Complete a formula recursiva de g(n)");
-                divider();
-                print("g(n) = 1+5(n-1)");
-                print("g(1)=????");
-                print("g(n) = g(n-1)+?????");
-                divider();
-                print("1)1 e 5 \n2)-1 e -5 \n3)-3 e 5 \n4)3 e -2 \n5)3 e -2");
-                result = inputInt();
-                divider();
-                if (result != 1) {
-                    print(WRONG_OPTION_MESSAGE);
-                    print(SUGGEST_VIDEO_MESSAGE);
-                    train(OPTION_TRAIN_PA);
-                    divider();
-                    validate = 1;
-                    break;
-                }
-
-                validate = 2;
-
-            } while (!(validate == 1 || validate == 2));
-            if (validate == 1) {
-                handleOptions(OPTIONS_PLAY);
-
+                validate = 1;
+                break;
             }
-        } catch (Exception e) {
-            handleError(e);
+            // question 2
+            print("Complete a formula recursiva de g(n)");
+            divider();
+            print("g(n) = 1+5(n-1)");
+            print("g(1)=????");
+            print("g(n) = g(n-1)+?????");
+            divider();
+            print("1)1 e 5 \n2)-1 e -5 \n3)-3 e 5 \n4)3 e -2 \n5)3 e -2");
+            result = inputInt();
+            divider();
+            if (result != 1) {
+                print(WRONG_OPTION_MESSAGE);
+                divider();
+                validate = 1;
+                break;
+            }
+
+            validate = 2;
+
+        } while (!(validate == 1 || validate == 2));
+        if (validate == 1) {
+            handleOptions(OPTIONS_PLAY);
+
         }
     }
 
     public void questionFuncOne() {
         int validate = 0, result = 0;
-        try {
-            do {
-                // question 1
-                print("\nDescubra o valode de h(-18)=???");
-                print("sabendo que h(x)= 17 + x/6");
+        do {
+            // question 1
+            print("\nDescubra o valode de h(-18)=???");
+            print("sabendo que h(x)= 17 + x/6");
+            divider();
+            print("1)25 \n2)-14 \n3)-49 \n4)32 \n5)14");
+            result = inputInt();
+            divider();
+            if (result != 5) {
+                print("resposta errada, volte ao começo e tente novamente");
                 divider();
-                print("1)25 \n2)-14 \n3)-49 \n4)32 \n5)14");
-                result = inputInt();
-                divider();
-                if (result != 5) {
-                    print(WRONG_OPTION_MESSAGE);
-                    print(SUGGEST_VIDEO_MESSAGE);
-                    train(OPTION_TRAIN_FIRST_DEGREE);
-                    divider();
-                    validate = 1;
-                    break;
-                }
-                // question 2
-                print("\nDescubra o valode de f(30)=???");
-                print("sabendo que f(x)= -14 - 0,05x");
-                divider();
-                print("1)23 \n2)-2 \n3)-11 \n4)-1 \n5)1");
-                result = inputInt();
-                divider();
-                if (result != 4) {
-                    print(WRONG_OPTION_MESSAGE);
-                    print(SUGGEST_VIDEO_MESSAGE);
-                    train(OPTION_TRAIN_FIRST_DEGREE);
-                    divider();
-                    validate = 1;
-                    break;
-                }
-
-                validate = 2;
-
-            } while (!(validate == 1 || validate == 2));
-            if (validate == 1) {
-                handleOptions(OPTIONS_PLAY);
+                validate = 1;
+                break;
             }
-        } catch (Exception e) {
-            handleError(e);
+            // question 2
+            print("\nDescubra o valode de f(30)=???");
+            print("sabendo que f(x)= -14 - 0,05x");
+            divider();
+            print("1)23 \n2)-2 \n3)-11 \n4)-1 \n5)1");
+            result = inputInt();
+            divider();
+            if (result != 4) {
+                print(WRONG_OPTION_MESSAGE);
+                divider();
+                validate = 1;
+                break;
+            }
+
+            validate = 2;
+
+        } while (!(validate == 1 || validate == 2));
+        if (validate == 1) {
+            handleOptions(OPTIONS_PLAY);
         }
     }
 
     public void questionFuncsecond() {
         int validate = 0, result = 0;
-        try {
-            do {
-                // question 1
-                print("\nEncontre as raizes da função");
-                print("Insira as soluções da menor para a maior");
+        do {
+            // question 1
+            print("\nEncontre as raizes da função");
+            print("Insira as soluções da menor para a maior");
+            divider();
+            print("f(x) = (-x-2)(-2x-3)");
+            divider();
+            print("1)Menor= -4 Maior = -1/2 \n2)Menor= -2 Maior= -3/2 \n3)Menor=-1 Maior= 1 \n4)Menor= 4 Maior= 10 \n5)Menor= 1 Maior= 3");
+            result = inputInt();
+            divider();
+            if (result != 2) {
+                print(WRONG_OPTION_MESSAGE);
                 divider();
-                print("f(x) = (-x-2)(-2x-3)");
-                divider();
-                print("1)Menor= -4 Maior = -1/2 \n2)Menor= -2 Maior= -3/2 \n3)Menor=-1 Maior= 1 \n4)Menor= 4 Maior= 10 \n5)Menor= 1 Maior= 3");
-                result = inputInt();
-                divider();
-                if (result != 2) {
-                    print(WRONG_OPTION_MESSAGE);
-                    print(SUGGEST_VIDEO_MESSAGE);
-                    train(OPTION_TRAIN_SECOND_DEGREE);
-                    divider();
-                    validate = 1;
-                    break;
-                }
-                // question 2
-                print("\nEncontre as raizes da função");
-                print("Insira as soluções da menor para a maior");
-                divider();
-                print("(2x+4)(3x-2)=0");
-                divider();
-                print("1)Menor= -2 Maior = 2/3 \n2)Menor= -2 Maior= 3/2 \n3)Menor=-2 Maior= 4 \n4)Menor= -2/3 Maior= 1 \n5)Menor= 12 Maior= 21");
-                result = inputInt();
-                divider();
-                if (result != 1) {
-                    print(WRONG_OPTION_MESSAGE);
-                    print(SUGGEST_VIDEO_MESSAGE);
-                    train(OPTION_TRAIN_SECOND_DEGREE);
-                    divider();
-                    validate = 1;
-                    break;
-                }
-
-                validate = 2;
-
-            } while (!(validate == 1 || validate == 2));
-            if (validate == 1) {
-                handleOptions(OPTIONS_PLAY);
+                validate = 1;
+                break;
             }
-        } catch (Exception e) {
-            handleError(e);
+            // question 2
+            print("\nEncontre as raizes da função");
+            print("Insira as soluções da menor para a maior");
+            divider();
+            print("(2x+4)(3x-2)=0");
+            divider();
+            print("1)Menor= -2 Maior = 2/3 \n2)Menor= -2 Maior= 3/2 \n3)Menor=-2 Maior= 4 \n4)Menor= -2/3 Maior= 1 \n5)Menor= 12 Maior= 21");
+            result = inputInt();
+            divider();
+            if (result != 4) {
+                print(WRONG_OPTION_MESSAGE);
+                divider();
+                validate = 1;
+                break;
+            }
+            validate = 2;
+
+        } while (!(validate == 1 || validate == 2));
+        if (validate == 1) {
+            handleOptions(OPTIONS_PLAY);
+        }
+
+    }
+
+    public void questionFuncexp() {
+        int validate = 0, result = 0;
+        do {
+            // question 1
+            print("\nSimplifique");
+            print("Reescreva a expressão na forma a^n");
+            divider();
+            print("a^-13/a^-6");
+            divider();
+            print("1)a^-15\n2)a^15 \n3)a^-7\n4)a^8 \n5)10");
+            result = inputInt();
+            divider();
+            if (result != 2) {
+                print(WRONG_OPTION_MESSAGE);
+                divider();
+                validate = 1;
+                break;
+            }
+
+        } while (!(validate == 1));
+        if (validate == 1) {
+            handleOptions(OPTIONS_PLAY);
+
         }
     }
 
