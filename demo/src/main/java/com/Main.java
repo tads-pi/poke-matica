@@ -695,32 +695,6 @@ public class Main {
         }
     }
 
-    public void questionFuncexp() {
-        int validate = 0, result = 0;
-        do {
-            // question 1
-            print("\nSimplifique");
-            print("Reescreva a expressão na forma a^n");
-            divider();
-            print("a^-13/a^-6");
-            divider();
-            print("1)a^-15\n2)a^15 \n3)a^-7\n4)a^8 \n5)10");
-            result = inputInt();
-            divider();
-            if (result != 2) {
-                print(WRONG_OPTION_MESSAGE);
-                divider();
-                validate = 1;
-                break;
-            }
-
-        } while (!(validate == 1));
-        if (validate == 1) {
-            handleOptions(OPTIONS_PLAY);
-
-        }
-    }
-
     public void handleTrain() {
         int selectedOption = handleOptions(OPTIONS_TRAIN);
 
