@@ -121,7 +121,7 @@ public class Main {
             "ginasio Do Grão Mestre",
     };
     public static final String[] INSIGNIA = new String[] {
-            "Nenhuma insignia",
+            "",
             "㊀",
             "㊁",
             "㊂",
@@ -672,8 +672,14 @@ public class Main {
     }
 
     public void handleBag() {
-        // System.out.println("handle bag");
+        print("Insignias: ");mostrarInsignias(valueWin);
+        print("Pokemons");
         handleOptions(OPTIONS_PLAY);
+    }
+    public void mostrarInsignias(int valueWin){
+        for (int i = 0; i < valueWin; i++) {
+            print(INSIGNIA[i]);
+        }
     }
 
     public void handleSave() {
