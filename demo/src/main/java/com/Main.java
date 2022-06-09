@@ -48,7 +48,7 @@ import io.jsonwebtoken.security.Keys;
 
 public class Main {
     // GAME OPTIONS
-    public static final int DEFAULT_TEXT_SPEED = 35; // in milliseconds;
+    public static final int DEFAULT_TEXT_SPEED = 5; // in milliseconds;
     public static final String KHAN_ACADEMY_LINKS_FILE = "khan_academy_links.xml"; // in milliseconds;
 
     public static final int OPTION_INTRODUCTION = 1;
@@ -105,7 +105,7 @@ public class Main {
     public String userUUID = "";
     public String userName = "";
     public String pokemon = "";
-    public String[] badge = new String[5];
+    public ArrayList<String> badge = new ArrayList<String>();
     // POKEMONS DATA
     public static final String[] STARTER_AVAILABLE_POKEMONS = new String[] {
             "Bulbassauro",
@@ -127,7 +127,6 @@ public class Main {
             "/*/",
             "/(*)/",
     };
-    public int valueWin = 0;
 
     // FALAS - USER
     public final String ASK_NAME = "Insira seu nome:";
@@ -219,7 +218,7 @@ public class Main {
         try {
             xmlBackup(MAKE_BACKUP);
             loadSaves();
-            startGame();
+            handlePlay();
         } catch (Exception e) {
             handleError(e);
         }
@@ -288,27 +287,32 @@ public class Main {
 
     public void selectGym(int optionGym) {
         int optionDefault = 0;
+        String[] badgeArr = new String[badge.size()];
+        for (int i = 0; i < badge.size(); i++) {
+            badgeArr[i] = badge.get(i);
+        }
+
         do {
             switch (optionGym) {
                 case 1:
                     gymVeryEasy();
-                    valueWin = 1;
+                    badge.add(INSIGNIA[0]);
                     break;
+
                 case 2:
-                    if (valueWin == 1) {
+                    if (stringArrayContains(badgeArr, INSIGNIA[0])) {
                         gymEasy();
-                        valueWin = 2;
+                        badge.add(INSIGNIA[1]);
                         break;
                     }
                     print("Este ginásio ainda não foi desbloqueado...");
                     handleBattle();
 
                     break;
-
                 case 3:
-                    if (valueWin == 2) {
+                    if (stringArrayContains(badgeArr, INSIGNIA[1])) {
                         gymMedium();
-                        valueWin = 3;
+                        badge.add(INSIGNIA[2]);
                     } else {
                         print("Este ginásio ainda não foi desbloqueado...");
                         handleBattle();
@@ -316,9 +320,9 @@ public class Main {
 
                     break;
                 case 4:
-                    if (valueWin == 3) {
+                    if (stringArrayContains(badgeArr, INSIGNIA[2])) {
                         gymHard();
-                        valueWin = 4;
+                        badge.add(INSIGNIA[3]);
                     } else {
                         print("Este ginásio ainda não foi desbloqueado...");
                         handleBattle();
@@ -326,10 +330,12 @@ public class Main {
 
                     break;
                 case 5:
-                    if (valueWin == 3) {
+                    if (stringArrayContains(badgeArr, INSIGNIA[3])) {
+                        gymVeryHard();
+                        badge.add(INSIGNIA[4]);
+
                         print(
                                 "Parabéns por ter vencer os 5 ginásios e ter se tornando um mestre Poke-Matica!");
-                        valueWin = 5;
                         handleCertificateCreator();
                     } else {
                         print("Este ginásio ainda não foi desbloqueado...");
@@ -436,7 +442,7 @@ public class Main {
         divider();
     }
 
-    public void verygymHard() {
+    public void gymVeryHard() {
         String leaderName = "Márcio Welker";
         print(
                 "Seja BEM VINDX ao " + GYM_NAME[4]
@@ -686,12 +692,12 @@ public class Main {
                 divider();
                 validate = 1;
                 break;
-            }
+            } 
+            validate = 2;
 
-        } while (!(validate == 1));
+        } while (!(validate == 1 || validate == 2));
         if (validate == 1) {
             handleOptions(OPTIONS_PLAY);
-
         }
     }
 
@@ -712,14 +718,14 @@ public class Main {
 
     public void handleBag() {
         print("Insignias: ");
-        mostrarInsignias(valueWin);
-        print("Pokemons");
+        mostrarInsignias();
+        print("Pokemon: " + pokemon);
         handleOptions(OPTIONS_PLAY);
     }
 
-    public void mostrarInsignias(int valueWin) {
-        for (int i = 0; i < valueWin; i++) {
-            print(INSIGNIA[i]);
+    public void mostrarInsignias() {
+        for (String b : badge) {
+            print(b);
         }
     }
 
@@ -890,7 +896,12 @@ public class Main {
 
     public int inputInt() {
         int i;
-        i = input.nextInt();
+        try {
+            i = Integer.parseInt(input.nextLine());
+        } catch (Exception e) {
+            System.out.println(WRONG_OPTION_MESSAGE);
+            i = inputInt();
+        }
         return i;
     }
 
@@ -967,7 +978,7 @@ public class Main {
                 handleBattle();
                 break;
             case OPTION_PLAY_EXIT:
-                startGame();
+                handleExit();
                 break;
             case OPTION_VALIDATE_CERTIFICATE:
                 handleCertificateValidation();
@@ -1181,14 +1192,15 @@ public class Main {
                                     Node e = list.item(k);
                                     if (e.getNodeType() == Node.ELEMENT_NODE) {
                                         org.w3c.dom.Element v = (org.w3c.dom.Element) e;
-                                        int badges = 0;
                                         switch (v.getNodeName()) {
                                             case "pokemon":
                                                 this.pokemon = v.getTextContent();
                                                 break;
                                             case "badge":
-                                                this.badge[badges] = v.getTextContent();
-                                                badges++;
+                                                String[] arr = v.getTextContent().split(" ");
+                                                for (String i : arr) {
+                                                    this.badge.add(i);
+                                                }
                                                 break;
                                         }
                                     }
@@ -1202,7 +1214,9 @@ public class Main {
             System.out.println(userName);
             System.out.println(userUUID);
             System.out.println(pokemon);
-            System.out.println(badge[0] + ", " + badge[1] + ", " + badge[2] + ", " + badge[3] + ", " + badge[4]);
+            for (String b : badge) {
+                System.out.println(b + ", ");
+            }
             divider();
         }
 
@@ -1250,6 +1264,7 @@ public class Main {
         userName.appendChild(userNameText);
         // UserUUID
         UUID uuid = UUID.randomUUID();
+        this.userUUID = uuid + "";
         Text userUUIDText = xmlDoc.createTextNode(uuid + "");
         userUUID.appendChild(userUUIDText);
         // UserBackpack
@@ -1258,7 +1273,7 @@ public class Main {
         backpackPokemon.appendChild(pokemonText);
         // Badge
         for (String badg : badge) {
-            Text badgeText = xmlDoc.createTextNode(badg);
+            Text badgeText = xmlDoc.createTextNode(badg + " ");
             backpackBadge.appendChild(badgeText);
         }
         userBackpack.appendChild(backpackPokemon);
@@ -1315,7 +1330,7 @@ public class Main {
                                                         v.setTextContent(this.pokemon);
                                                         break;
                                                     case "badge":
-                                                        v.setTextContent(this.badge[badges]);
+                                                        v.setTextContent(this.badge.get(badges));
                                                         badges++;
                                                         break;
                                                 }
